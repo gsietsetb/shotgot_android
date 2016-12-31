@@ -1,0 +1,8 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    <item name="ic_menu_ShotGot" type="drawable">@android:drawable/ic_menu_camera</item>
+    <item name="ic_menu_ShotBot" type="drawable">@android:drawable/ic_menu_gallery</item>
+    <item name="ic_menu_AroundGot" type="drawable">@android:drawable/ic_menu_slideshow</item>
+    <item name="ic_menu_ShotWhat" type="drawable">@android:drawable/ic_menu_manage</item>
+    <item name="ic_menu_TrendGot" type="drawable">@android:drawable/ic_menu_send</item>
+    <item name="ic_menu_share" type="drawable">@android:drawable/ic_menu_share</item>
+</resources>

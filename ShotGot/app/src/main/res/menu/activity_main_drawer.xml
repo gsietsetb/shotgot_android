@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_ShotGot"
+            android:icon="@android:drawable/ic_menu_view"
+            android:title="ShotGot" />
+        <item
+            android:id="@+id/nav_BotGot"
+            android:icon="@android:drawable/ic_btn_speak_now"
+            android:title="BotGot" />
+        <item
+            android:id="@+id/nav_WishGot"
+            android:icon="@drawable/heart"
+            android:title="WishGot" />
+        <item
+            android:id="@+id/nav_AroundGot"
+            android:icon="@android:drawable/ic_menu_mylocation"
+            android:title="AroundGot" />
+        <item
+            android:id="@+id/nav_ShotWhat"
+            android:icon="@drawable/ic_menu_share"
+            android:title="ShotWhat" />
+        <item
+            android:id="@+id/nav_TrendGot"
+            android:icon="@android:drawable/ic_menu_compass"
+            android:title="TrendGot" />
+        <item
+            android:id="@+id/nav_manage"
+            android:icon="@drawable/ic_menu_ShotWhat"
+            android:title="Seetings" />
+    </group>
+
+    <item android:title="Communicate">
+        <menu>
+            <item
+                android:id="@+id/nav_share"
+                android:icon="@android:drawable/ic_menu_share"
+                android:title="Share" />
+        </menu>
+    </item>
+
+</menu>

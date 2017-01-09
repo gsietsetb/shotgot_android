@@ -9,6 +9,8 @@
 
     <string name="title_activity_shot_got_ar">shotGotAr</string>
     <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="TapObject">Tap to any \nObject!</string>
     <string name="title_activity_maps">Map</string>
+    <string name="take_photo_help">Some help!</string>
+    <string name="camera_not_found">Not found!</string>
 </resources>

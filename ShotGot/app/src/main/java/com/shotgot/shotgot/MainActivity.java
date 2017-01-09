@@ -1,6 +1,25 @@
 package com.shotgot.shotgot;
 
 import android.Manifest;
+
+import android.app.Activity;
+import android.app.AlertDialog;
+
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+
+import android.net.Uri;
+import android.os.Bundle;
+import android.provider.Settings;
+
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+
 import android.app.Fragment;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -30,6 +49,9 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    public static final int MY_PERMISSIONS_REQUEST_CAMERA = 100;
+    public static final String ALLOW_KEY = "ALLOWED";
+    public static final String CAMERA_PREF = "camera_pref";
     private boolean viewIsAtHome;
 
     SurfaceView mSurfaceView;
@@ -42,9 +64,6 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         initCamera();
-
-        // Create our Preview view and set it as the content of our activity.
-        mSurfaceView = (SurfaceView) findViewById(R.id.surfaceView);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -66,91 +85,152 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void initCamera() {
-        Log.d("ACT_MAIN", "initCamera() start");
-        CameraManager cameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
-        Log.d("ACT_MAIN", "acquired cameraManager: " + cameraManager);
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            if (getFromPref(this, ALLOW_KEY)) {
+                showSettingsAlert();
+            } else if (ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.CAMERA)
 
-        String[] cameraIdList;
-        try {
-            cameraIdList = cameraManager.getCameraIdList();
-        } catch (CameraAccessException e) {
-            Log.e("ACT_MAIN", "couldn't get camera list", e);
-            return;
-        }
-        Log.d("ACT_MAIN", "acquired cameraIdList: length: " + cameraIdList.length);
+                    != PackageManager.PERMISSION_GRANTED) {
 
-        if (cameraIdList.length == 0) {
-            Log.w("ACT_MAIN", "couldn't detect a camera");
-            return;
-        }
-
-        String camera0Id = cameraIdList[0];
-
-        Log.d("ACT_MAIN", "chosen camera: " + camera0Id);
-
-        try {
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
-                return;
+                // Should we show an explanation?
+                if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                        Manifest.permission.CAMERA)) {
+                    showAlert();
+                } else {
+                    // No explanation needed, we can request the permission.
+                    ActivityCompat.requestPermissions(this,
+                            new String[]{Manifest.permission.CAMERA},
+                            MY_PERMISSIONS_REQUEST_CAMERA);
+                }
             }
-            cameraManager.openCamera(camera0Id, deviceCallback, null);
-        } catch (CameraAccessException e) {
-            Log.e("ACT_MAIN", "couldn't open camera", e);
+        } else {
+            openCamera();
         }
-        Log.d("ACT_MAIN", "called cameraManager.openCamera()");
+    }
+    public static void saveToPreferences(Context context, String key, Boolean allowed) {
+        SharedPreferences myPrefs = context.getSharedPreferences(CAMERA_PREF,
+                Context.MODE_PRIVATE);
+        SharedPreferences.Editor prefsEditor = myPrefs.edit();
+        prefsEditor.putBoolean(key, allowed);
+        prefsEditor.commit();
     }
 
-    CameraDevice.StateCallback deviceCallback = new CameraDevice.StateCallback() {
+    public static Boolean getFromPref(Context context, String key) {
+        SharedPreferences myPrefs = context.getSharedPreferences(CAMERA_PREF,
+                Context.MODE_PRIVATE);
+        return (myPrefs.getBoolean(key, false));
+    }
 
-        @Override
-        public void onOpened(CameraDevice camera) {
-            Log.d("ACT_MAIN", "deviceCallback.onOpened() start");
+    private void showAlert() {
+        AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
+        alertDialog.setTitle("Alert");
+        alertDialog.setMessage("App needs to access the Camera.");
 
-            mSurfaceView.getHolder().setFixedSize(previewSize.getWidth(), previewSize.getHeight());
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "DONT ALLOW",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        finish();
+                    }
+                });
 
-            Surface surface = mSurfaceView.getHolder().getSurface();
-            Log.d("ACT_MAIN", "surface: " + surface);
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "ALLOW",
+                new DialogInterface.OnClickListener() {
 
-            List<Surface> surfaceList = Collections.singletonList(surface);
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        ActivityCompat.requestPermissions(MainActivity.this,
+                                new String[]{Manifest.permission.CAMERA},
+                                MY_PERMISSIONS_REQUEST_CAMERA);
+                    }
+                });
+        alertDialog.show();
+    }
 
-            try {
-                camera.createCaptureSession(surfaceList, sessionCallback, null);
-            } catch (CameraAccessException e) {
-                Log.e("ACT_MAIN", "couldn't create capture session for camera: " + camera.getId(), e);
-                return;
+    private void showSettingsAlert() {
+        AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
+        alertDialog.setTitle("Alert");
+        alertDialog.setMessage("App needs to access the Camera.");
+
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "DONT ALLOW",
+                new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        //finish();
+                    }
+                });
+
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "SETTINGS",
+                new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        startInstalledAppDetailsActivity(MainActivity.this);
+                    }
+                });
+
+        alertDialog.show();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_CAMERA: {
+                for (int i = 0, len = permissions.length; i < len; i++) {
+                    String permission = permissions[i];
+
+                    if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
+                        boolean
+                                showRationale =
+                                ActivityCompat.shouldShowRequestPermissionRationale(
+                                        this, permission);
+
+                        if (showRationale) {
+                            showAlert();
+                        } else if (!showRationale) {
+                            // user denied flagging NEVER ASK AGAIN
+                            // you can either enable some fall back,
+                            // disable features of your app
+                            // or open another dialog explaining
+                            // again the permission and directing to
+                            // the app setting
+                            saveToPreferences(MainActivity.this, ALLOW_KEY, true);
+                        }
+                    }
+                }
             }
 
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    public static void startInstalledAppDetailsActivity(final Activity context) {
+        if (context == null) {
+            return;
         }
 
-        @Override
-        public void onDisconnected(CameraDevice camera) {
-            Log.d("ACT_MAIN", "deviceCallback.onDisconnected() start");
-        }
+        final Intent i = new Intent();
+        i.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        i.addCategory(Intent.CATEGORY_DEFAULT);
+        i.setData(Uri.parse("package:" + context.getPackageName()));
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        i.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+        context.startActivity(i);
+    }
 
-        @Override
-        public void onError(CameraDevice camera, int error) {
-            Log.d("ACT_MAIN", "deviceCallback.onError() start");
-        }
-
-    };
-
-    CameraCaptureSession.StateCallback sessionCallback = new CameraCaptureSession.StateCallback() {
-        @Override
-        public void onConfigured(CameraCaptureSession session) {
-            Log.i("ACT_MAIN", "capture session configured: " + session);
-        }
-
-        @Override
-        public void onConfigureFailed(CameraCaptureSession session) {
-            Log.e("ACT_MAIN", "capture session configure failed: " + session);
-        }
-    };
+    private void openCamera() {
+        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+        startActivity(intent);
+    }
 
     @Override
     public void onBackPressed() {
@@ -243,6 +323,11 @@ public class MainActivity extends AppCompatActivity
                 viewIsAtHome = false;
                 break;
 
+            case R.id.nav_AroundGot:
+                setContentView(R.layout.activity_maps);
+                viewIsAtHome = false;
+                break;
+
 //            case R.id.nav_BotGot:
 //                fragment = new EventsFragment();
 //                title = getString(R.string.events_title);
@@ -255,17 +340,5 @@ public class MainActivity extends AppCompatActivity
 //                viewIsAtHome = false;
 //                break;
         }
-    }
-
-    public void surfaceChanged(SurfaceHolder arg0, int arg1, int arg2, int arg3) {
-        // TODO Auto-generated method stub
-    }
-
-    public void surfaceCreated(SurfaceHolder holder) {
-        // TODO Auto-generated method stub
-    }
-
-    public void surfaceDestroyed(SurfaceHolder holder) {
-        // TODO Auto-generated method stub
     }
 }

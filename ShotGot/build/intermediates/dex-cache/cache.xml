@@ -3,138 +3,138 @@
 
     <item
         is-multidex="true"
-        jar="/home/gsierra/dev/projects/ShotGot/ShotGot-Android/ShotGot/app/build/intermediates/exploded-aar/com.android.support/support-v4/25.1.0/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.1"
-        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
-        <dex dex="/home/gsierra/dev/projects/ShotGot/ShotGot-Android/ShotGot/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-v4-25.1.0_a69dc12b8702d5d0cfe2f4359cd878e2e477db4a/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/gsierra/dev/projects/ShotGot/ShotGot-Android/ShotGot/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.1"
-        sha1="441412dac976bf038525fc0547f5aeab0290e452">
-        <dex dex="/home/gsierra/dev/projects/ShotGot/ShotGot-Android/ShotGot/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_36fc86dd2a69b6c18849af789121c23c007155e8/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
         jar="/home/gsierra/Android/Sdk/extras/android/m2repository/com/android/support/support-annotations/25.1.0/support-annotations-25.1.0.jar"
         jumboMode="true"
         optimize="true"
         revision="25.0.1"
         sha1="64cb6b229a8bdfd907bc8dd46839a0053e4c018d">
-        <dex dex="/home/gsierra/dev/projects/ShotGot/ShotGot-Android/ShotGot/app/build/intermediates/transforms/dex/debug/folders/1000/10/support-annotations-25.1.0_0cf68a6e20c6982df643e1c8d0da51075eb92bf7/classes.dex" />
+        <dex dex="/home/gsierra/dev/projects/shotGot.com/ShotGot-Android/ShotGot/app/build/intermediates/transforms/dex/debug/folders/1000/10/support-annotations-25.1.0_0cf68a6e20c6982df643e1c8d0da51075eb92bf7/classes.dex" />
     </item>
     <item
         is-multidex="true"
-        jar="/home/gsierra/dev/projects/ShotGot/ShotGot-Android/ShotGot/app/build/intermediates/exploded-aar/com.android.support/support-media-compat/25.1.0/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.1"
-        sha1="f02263e35e52668dd17b73bf961437e3d562b35f">
-        <dex dex="/home/gsierra/dev/projects/ShotGot/ShotGot-Android/ShotGot/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-media-compat-25.1.0_add214a535b6b626fd419bc5c1642ad00d1776ca/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/gsierra/dev/projects/ShotGot/ShotGot-Android/ShotGot/app/build/intermediates/exploded-aar/com.android.support/support-fragment/25.1.0/jars/classes.jar"
+        jar="/home/gsierra/dev/projects/shotGot.com/ShotGot-Android/ShotGot/app/build/intermediates/exploded-aar/com.android.support/support-fragment/25.1.0/jars/classes.jar"
         jumboMode="true"
         optimize="true"
         revision="25.0.1"
         sha1="2a53c4f3518116b8c6aee0e477233f0f7da8616f">
-        <dex dex="/home/gsierra/dev/projects/ShotGot/ShotGot-Android/ShotGot/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-fragment-25.1.0_a5cbd6894859101edf0e792cc5747ed2ad351d2c/classes.dex" />
+        <dex dex="/home/gsierra/dev/projects/shotGot.com/ShotGot-Android/ShotGot/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-fragment-25.1.0_b8d5c55b7ed0d569fdd01db2b26dc2ac77801851/classes.dex" />
     </item>
     <item
         is-multidex="true"
-        jar="/home/gsierra/dev/projects/ShotGot/ShotGot-Android/ShotGot/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.1"
-        sha1="85a8c44f1e7885d81bfbb21c63a2e2a33126c9d9">
-        <dex dex="/home/gsierra/dev/projects/ShotGot/ShotGot-Android/ShotGot/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_2a6a1f069e9e8f6ce65dd34aad78a1305752e08c/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/gsierra/dev/projects/ShotGot/ShotGot-Android/ShotGot/app/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/25.1.0/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.1"
-        sha1="e79aa3d9a16f8c9f16377c0608de70a8f31e5d80">
-        <dex dex="/home/gsierra/dev/projects/ShotGot/ShotGot-Android/ShotGot/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-vector-drawable-25.1.0_ab4f193133bb64c9ee7f105d7d7741f5a74d989d/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/gsierra/dev/projects/ShotGot/ShotGot-Android/ShotGot/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.1.0/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.1"
-        sha1="1630658fbc2d222b988603c27b4a4249586fbfe7">
-        <dex dex="/home/gsierra/dev/projects/ShotGot/ShotGot-Android/ShotGot/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-appcompat-v7-25.1.0_ab672db88cbc04038cc24733d82a30fe81044d71/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/gsierra/dev/projects/ShotGot/ShotGot-Android/ShotGot/app/build/intermediates/exploded-aar/com.android.support/design/25.1.0/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.1"
-        sha1="30103d98fa5ed824b54af839c85e2111f9bde8ec">
-        <dex dex="/home/gsierra/dev/projects/ShotGot/ShotGot-Android/ShotGot/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-design-25.1.0_7edb922ef50017c618907ab687c14e839808bffb/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/gsierra/dev/projects/ShotGot/ShotGot-Android/ShotGot/app/build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/25.1.0/jars/classes.jar"
+        jar="/home/gsierra/dev/projects/shotGot.com/ShotGot-Android/ShotGot/app/build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/25.1.0/jars/classes.jar"
         jumboMode="true"
         optimize="true"
         revision="25.0.1"
         sha1="6fb6ac3e8d3b9013819920d9ea11f3803c4c0033">
-        <dex dex="/home/gsierra/dev/projects/ShotGot/ShotGot-Android/ShotGot/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-animated-vector-drawable-25.1.0_b1b95f97813c78d41a90c0bc0bb9a083b0456e87/classes.dex" />
+        <dex dex="/home/gsierra/dev/projects/shotGot.com/ShotGot-Android/ShotGot/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-animated-vector-drawable-25.1.0_32fc6e4a7169aab75975f21fc8e96f5ded4e84f0/classes.dex" />
     </item>
     <item
         is-multidex="true"
-        jar="/home/gsierra/dev/projects/ShotGot/ShotGot-Android/ShotGot/app/build/intermediates/exploded-aar/com.android.support/transition/25.1.0/jars/classes.jar"
+        jar="/home/gsierra/dev/projects/shotGot.com/ShotGot-Android/ShotGot/app/build/intermediates/exploded-aar/com.android.support/design/25.1.0/jars/classes.jar"
         jumboMode="true"
         optimize="true"
         revision="25.0.1"
-        sha1="d38084015027549951cbaea5d5f6fb795cc81151">
-        <dex dex="/home/gsierra/dev/projects/ShotGot/ShotGot-Android/ShotGot/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-transition-25.1.0_dfa68692f3597271ed2fed1a6ae24e2535e1f40c/classes.dex" />
+        sha1="30103d98fa5ed824b54af839c85e2111f9bde8ec">
+        <dex dex="/home/gsierra/dev/projects/shotGot.com/ShotGot-Android/ShotGot/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-design-25.1.0_4827e5cc1b3162365cf0897186332fc4b1faffaf/classes.dex" />
     </item>
     <item
         is-multidex="true"
-        jar="/home/gsierra/dev/projects/ShotGot/ShotGot-Android/ShotGot/app/build/intermediates/exploded-aar/com.android.support/support-core-ui/25.1.0/jars/classes.jar"
+        jar="/home/gsierra/dev/projects/shotGot.com/ShotGot-Android/ShotGot/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
         jumboMode="true"
         optimize="true"
         revision="25.0.1"
-        sha1="aee64634871d88a419d59eb743c1258a60f19700">
-        <dex dex="/home/gsierra/dev/projects/ShotGot/ShotGot-Android/ShotGot/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-core-ui-25.1.0_8e05b3bc185267932e3489adebfd1c2bdd6a8ce0/classes.dex" />
+        sha1="4204f847bdb3a6cce9050f1e2fb3f3726ca3841f">
+        <dex dex="/home/gsierra/dev/projects/shotGot.com/ShotGot-Android/ShotGot/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_fdd763872cdc6af6673baf9647f933a1b244f072/classes.dex" />
     </item>
     <item
         is-multidex="true"
-        jar="/home/gsierra/dev/projects/ShotGot/ShotGot-Android/ShotGot/app/build/intermediates/exploded-aar/com.android.support/support-core-utils/25.1.0/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.1"
-        sha1="0a0ef86b7fa568a52bf6214a0326ca1f1d618da7">
-        <dex dex="/home/gsierra/dev/projects/ShotGot/ShotGot-Android/ShotGot/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-core-utils-25.1.0_7802b6271164445b96e0eb6efa3c0f3f369b0f3f/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/gsierra/dev/projects/ShotGot/ShotGot-Android/ShotGot/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/25.1.0/jars/classes.jar"
+        jar="/home/gsierra/dev/projects/shotGot.com/ShotGot-Android/ShotGot/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/25.1.0/jars/classes.jar"
         jumboMode="true"
         optimize="true"
         revision="25.0.1"
         sha1="b266c8faa5af72e579b9da36ef35053ffed6ac64">
-        <dex dex="/home/gsierra/dev/projects/ShotGot/ShotGot-Android/ShotGot/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-recyclerview-v7-25.1.0_6aaade2d51d6b3d9a4fdd720719696e77d65e7ad/classes.dex" />
+        <dex dex="/home/gsierra/dev/projects/shotGot.com/ShotGot-Android/ShotGot/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-recyclerview-v7-25.1.0_0947f41516bbccbffd61b3ac5dfe5a12cc49d202/classes.dex" />
     </item>
     <item
         is-multidex="true"
-        jar="/home/gsierra/dev/projects/ShotGot/ShotGot-Android/ShotGot/app/build/intermediates/exploded-aar/com.android.support/support-compat/25.1.0/jars/classes.jar"
+        jar="/home/gsierra/dev/projects/shotGot.com/ShotGot-Android/ShotGot/app/build/intermediates/exploded-aar/com.android.support/support-core-ui/25.1.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="aee64634871d88a419d59eb743c1258a60f19700">
+        <dex dex="/home/gsierra/dev/projects/shotGot.com/ShotGot-Android/ShotGot/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-core-ui-25.1.0_aaf12999e6cfcc1f12b4c2a14d983c2b79e1306b/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/gsierra/dev/projects/shotGot.com/ShotGot-Android/ShotGot/app/build/intermediates/exploded-aar/com.android.support/support-compat/25.1.0/jars/classes.jar"
         jumboMode="true"
         optimize="true"
         revision="25.0.1"
         sha1="ca3c7aa31e2726a400a6e552b93cb9f63c9a1e6d">
-        <dex dex="/home/gsierra/dev/projects/ShotGot/ShotGot-Android/ShotGot/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-compat-25.1.0_a67bfd82189d5549e262131ee5bf7fe75149930f/classes.dex" />
+        <dex dex="/home/gsierra/dev/projects/shotGot.com/ShotGot-Android/ShotGot/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-compat-25.1.0_18c88bba6e397d53fed5643252db649a492730b0/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/gsierra/dev/projects/shotGot.com/ShotGot-Android/ShotGot/app/build/intermediates/exploded-aar/com.android.support/support-core-utils/25.1.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="0a0ef86b7fa568a52bf6214a0326ca1f1d618da7">
+        <dex dex="/home/gsierra/dev/projects/shotGot.com/ShotGot-Android/ShotGot/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-core-utils-25.1.0_b123d65cd925aaea8e4175f1c4ea87a6cbcc1987/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/gsierra/dev/projects/shotGot.com/ShotGot-Android/ShotGot/app/build/intermediates/exploded-aar/com.android.support/support-v4/25.1.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
+        <dex dex="/home/gsierra/dev/projects/shotGot.com/ShotGot-Android/ShotGot/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-v4-25.1.0_472ce4aa943984eb3cc7e726afdaf9fdaf1855bb/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/gsierra/dev/projects/shotGot.com/ShotGot-Android/ShotGot/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="4b3e26a69adbb00518e1755396cf834b83e9a41d">
+        <dex dex="/home/gsierra/dev/projects/shotGot.com/ShotGot-Android/ShotGot/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_b1156a907e319c39386cd2a17cac284e90bcd945/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/gsierra/dev/projects/shotGot.com/ShotGot-Android/ShotGot/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.1.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="1630658fbc2d222b988603c27b4a4249586fbfe7">
+        <dex dex="/home/gsierra/dev/projects/shotGot.com/ShotGot-Android/ShotGot/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-appcompat-v7-25.1.0_f6bbade9edc61e233046293ab48f227daa8f16e9/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/gsierra/dev/projects/shotGot.com/ShotGot-Android/ShotGot/app/build/intermediates/exploded-aar/com.android.support/support-media-compat/25.1.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="f02263e35e52668dd17b73bf961437e3d562b35f">
+        <dex dex="/home/gsierra/dev/projects/shotGot.com/ShotGot-Android/ShotGot/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-media-compat-25.1.0_0564e069f8e778b2ec39c45c2e070af34e5496d5/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/gsierra/dev/projects/shotGot.com/ShotGot-Android/ShotGot/app/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/25.1.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="e79aa3d9a16f8c9f16377c0608de70a8f31e5d80">
+        <dex dex="/home/gsierra/dev/projects/shotGot.com/ShotGot-Android/ShotGot/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-vector-drawable-25.1.0_1f24ca453692a27545e927b2fba9cb9379caef2f/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/gsierra/dev/projects/shotGot.com/ShotGot-Android/ShotGot/app/build/intermediates/exploded-aar/com.android.support/transition/25.1.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="d38084015027549951cbaea5d5f6fb795cc81151">
+        <dex dex="/home/gsierra/dev/projects/shotGot.com/ShotGot-Android/ShotGot/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-transition-25.1.0_2f22f5f5c70fcc8644fd93fddf7e91aebb670142/classes.dex" />
     </item>
 
 </items>

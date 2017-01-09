@@ -6,14 +6,18 @@
 
     <!-- Needed only if your app targets Android 5.0 (API level 21) or higher. -->
     <uses-feature android:name="android.hardware.location.gps" />
+
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
-    <!--For pragmatically N diff camera sizes-->
-    <supports-screens android:largeScreens="true"
+    <!-- For pragmatically N diff camera sizes -->
+    <supports-screens
+        android:largeScreens="true"
         android:normalScreens="true"
-        android:smallScreens="true" android:xlargeScreens="true"/>
+        android:smallScreens="true"
+        android:xlargeScreens="true" />
+
     <application
         android:allowBackup="true"
         android:hardwareAccelerated="false"
@@ -36,7 +40,22 @@
             android:name=".shotGotAr"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_shot_got_ar"
-            android:theme="@style/FullscreenTheme"></activity>
+            android:theme="@style/FullscreenTheme" />
+        <!--
+             The API key for Google Maps-based APIs is defined as a string resource.
+             (See the file "res/values/google_maps_api.xml").
+             Note that the API key is linked to the encryption key used to sign the APK.
+             You need a different API key for each encryption key, including the release key that is used to
+             sign the APK for publishing.
+             You can define the keys for the debug and release targets in src/debug/ and src/release/. 
+        -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
+
+        <activity
+            android:name=".AroundGot"
+            android:label="@string/title_activity_maps"></activity>
     </application>
 
 </manifest>

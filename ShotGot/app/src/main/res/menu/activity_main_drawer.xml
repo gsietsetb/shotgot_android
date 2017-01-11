@@ -5,11 +5,15 @@
         <item
             android:id="@+id/nav_ShotGot"
             android:icon="@android:drawable/ic_menu_view"
-            android:title="ShotGot" />
+            android:title="Shot" />
+        <item
+            android:id="@+id/nav_ShotWhat"
+            android:icon="@drawable/quantum_ic_art_track_grey600_48"
+            android:title="ShotWhat" />
         <item
             android:id="@+id/nav_BotGot"
             android:icon="@android:drawable/ic_btn_speak_now"
-            android:title="BotGot" />
+            android:title="Bot" />
         <item
             android:id="@+id/nav_WishGot"
             android:icon="@drawable/heart"
@@ -17,27 +21,24 @@
         <item
             android:id="@+id/nav_AroundGot"
             android:icon="@android:drawable/ic_menu_mylocation"
-            android:title="AroundGot" />
-        <item
-            android:id="@+id/nav_ShotWhat"
-            android:icon="@drawable/ic_menu_share"
-            android:title="ShotWhat" />
+            android:title="Around" />
+
         <item
             android:id="@+id/nav_TrendGot"
-            android:icon="@android:drawable/ic_menu_compass"
+            android:icon="@android:drawable/alert_dark_frame"
             android:title="TrendGot" />
-        <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_ShotWhat"
-            android:title="Seetings" />
     </group>
 
-    <item android:title="Communicate">
+    <item android:title="Settings">
         <menu>
             <item
                 android:id="@+id/nav_share"
                 android:icon="@android:drawable/ic_menu_share"
-                android:title="Share" />
+                android:title="Accounts" />
+            <item
+                android:id="@+id/nav_manage"
+                android:icon="@drawable/ic_menu_ShotWhat"
+                android:title="Payment" />
         </menu>
     </item>
 

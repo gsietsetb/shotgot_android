@@ -1,43 +1,84 @@
 package com.shotgot.shotgot;
 
+import android.app.AlertDialog;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.content.DialogInterface;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.view.MenuItem;
-import android.view.View;
-import android.support.v4.view.GravityCompat;
-import android.util.Log;
-import android.view.Menu;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 
-import android.os.Build;
+import com.shotgot.shotgot.Camera.CameraActivity;
+import com.shotgot.shotgot.Camera.NativeCameraFragment;
+import com.shotgot.shotgot.Fragment.BaseFragment;
+import com.shotgot.shotgot.Fragment.FragmentAround;
+import com.shotgot.shotgot.Fragment.FragmentShot;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    private boolean viewIsAtHome;
-    final View decorView = this.getWindow().getDecorView();
+public class MainActivity extends CameraActivity
+        implements NavigationView.OnNavigationItemSelectedListener,
+        BaseFragment.OnFragmentInteractionListener,
+        FragmentAround.OnFragmentInteractionListener,
+        FragmentShot.OnFragmentInteractionListener {
+
+    /**
+     * Actions
+     */
+    public static final int SELECT_PICTURE_ACTION = 0;
+    public static final int SELECT_ITEM_ACTION = 1;
+    public static final int SELECT_WISH_ACTION = 2;
+
+    /**
+     * Fragment Identifiers
+     */
+    public static final int SHOT_FRAGMENT = 0;
+    public static final int BOT_FRAGMENT = 1;
+    public static final int WHAT_FRAGMENT = 2;
+    public static final int AROUND_FRAGMENT = 3;
+    public static final int ACCOUNTS_SETTINGS_FRAGMENT = 4;
+
+    /*
+     * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
+    private NavigationDrawerFragment mNavigationDrawerFragment;
+    */
+
+    /**
+     * Used to store the last screen title. For use in {@link #restoreActionBar()}.
+     */
+    private CharSequence mTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        decorView.setOnSystemUiVisibilityChangeListener(
-                new View.OnSystemUiVisibilityChangeListener() {
-                    @Override
-                    public void onSystemUiVisibilityChange(int i) {
-                        int height = decorView.getHeight();
-                        Log.i("", "Current height: " + height);
-                    }
-                });
+
+        /**Set Fullscreen inmersive mode*/
+        getWindow().getDecorView().setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
+                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+
         setContentView(R.layout.activity_main);
+
+        /**Toolbar*/
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        toggleHideyBar();
 
-//        initCamera();
-
+        /**Auto Shortcut to Camera mode*/
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,6 +88,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
+        /**For the Lateral menu */
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -55,103 +97,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        mTitle = getTitle();
+
+        /**InCase of using custom navDrawerFragment
+         mNavigationDrawerFragment = (NavigationDrawerFragment)
+         getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
+
+         // Set up the drawer.
+         mNavigationDrawerFragment.setUp(
+         R.id.navigation_drawer,
+         (DrawerLayout) findViewById(R.id.drawer_layout));
+         */
+
+        /**Fragment management */
+        Fragment fragment = new FragmentShot(); // create a fragement object
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.replace(R.id.mainFrame, fragment);
+        ft.commit();
     }
 
-//    public static void saveToPreferences(Context context, String key, Boolean allowed) {
-//        SharedPreferences myPrefs = context.getSharedPreferences(CAMERA_PREF,
-//                Context.MODE_PRIVATE);
-//        SharedPreferences.Editor prefsEditor = myPrefs.edit();
-//        prefsEditor.putBoolean(key, allowed);
-//        prefsEditor.commit();
-//    }
-//
-//    public static Boolean getFromPref(Context context, String key) {
-//        SharedPreferences myPrefs = context.getSharedPreferences(CAMERA_PREF,
-//                Context.MODE_PRIVATE);
-//        return (myPrefs.getBoolean(key, false));
-//    }
-//
-//private void showSettingsAlert() {
-//        AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
-//        alertDialog.setTitle("Alert");
-//        alertDialog.setMessage("App needs to access the Camera.");
-//
-//        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "DONT ALLOW",
-//        new DialogInterface.OnClickListener() {
-//
-//public void onClick(DialogInterface dialog, int which) {
-//        dialog.dismiss();
-//        //finish();
-//        }
-//        });
-//
-//        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "SETTINGS",
-//        new DialogInterface.OnClickListener() {
-//
-//public void onClick(DialogInterface dialog, int which) {new DialogInterface.OnClickListener() {
-//public void onClick(DialogInterface dialog, int which) {
-//        dialog.dismiss();
-//        finish();
-//        dialog.dismiss();
-//        startInstalledAppDetailsActivity(MainActivity.this);
-//        }
-//        });
-//
-//        alertDialog.show();
-//        }
-//
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-//        switch (requestCode) {
-//            case MY_PERMISSIONS_REQUEST_CAMERA: {
-//                for (int i = 0, len = permissions.length; i < len; i++) {
-//                    String permission = permissions[i];
-//
-//                    if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
-//                        boolean
-//                                showRationale =
-//                                ActivityCompat.shouldShowRequestPermissionRationale(
-//                                        this, permission);
-//
-//                        if (showRationale) {
-//                            showAlert();
-//                        } else if (!showRationale) {
-//                            // user denied flagging NEVER ASK AGAIN
-//                            // you can either enable some fall back,
-//                            // disable features of your app
-//                            // or open another dialog explaining
-//                            // again the permission and directing to
-//                            // the app setting
-//                            saveToPreferences(MainActivity.this, ALLOW_KEY, true);
-//                        }
-//                    }
-//                }
-//            }
-//
-//            // other 'case' lines to check for other
-//            // permissions this app might request
-//        }
-////    }
-//
-//    public static void startInstalledAppDetailsActivity(final Activity context) {
-//        if (context == null) {
-//            return;
-//        }
-//
-//        final Intent i = new Intent();
-//        i.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-//        i.addCategory(Intent.CATEGORY_DEFAULT);
-//        i.setData(Uri.parse("package:" + context.getPackageName()));
-//        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//        i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-//        i.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-//        context.startActivity(i);
-//    }
-@Override
-public boolean onOptionsItemSelected(MenuItem item) {
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
 
-    return true;
-}
+        return true;
+    }
 
     /**
      * Detects and toggles immersive mode (also known as "hidey bar" mode).
@@ -197,12 +167,23 @@ public boolean onOptionsItemSelected(MenuItem item) {
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        new AlertDialog.Builder(this)
+                .setTitle("Really Exit?")
+                .setMessage("Are you sure you want to exit?")
+                .setNegativeButton(android.R.string.no, null)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        MainActivity.super.onBackPressed();
+                    }
+                }).create().show();
+
+        /*DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
-        }
+        }*/
     }
 
     @Override
@@ -212,11 +193,93 @@ public boolean onOptionsItemSelected(MenuItem item) {
         return true;
     }
 
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) {
+            getWindow().getDecorView().setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
+                            | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
+                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+        }
+    }
+
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
+
+        BaseFragment targetFragment = null;
+        FragmentManager fragmentManager = getFragmentManager();
+
+        switch (item.getItemId()) {
+//        if (id == R.id.nav_ShotGot) {    //Augmented Reality
+//            // Handle the camera action
+//        } else if (id == R.id.nav_BotGot) {  //Augmented Reality
+//
+//        } else if (id == R.id.nav_WishGot) {  //Voice
+//
+//        } else if (id == R.id.nav_ShotWhat) {
+//
+//        } else if (id == R.id.nav_TrendGot) {   // Small Market
+//
+//        } else if (id == R.id.nav_AroundGot) {  //Google Maps
+//
+//        } else if (id == R.id.nav_TrendGot) {
+//
+//        } else if (id == R.id.nav_share) {
+            case R.id.nav_ShotGot:
+/*
+                targetFragment = new FragmentShot.newInstance(item.getItemId());
+*/
+                mTitle = getString(R.string.title_Shot);
+                //setContentView(R.layout.activity_shot_got_ar);
+                break;
+
+            case R.id.nav_BotGot:
+                targetFragment = NativeCameraFragment.newInstance(item.getItemId());
+                mTitle = getString(R.string.title_Bot);
+                //setContentView(R.layout.activity_maps);
+                break;
+
+            case R.id.nav_AroundGot:
+                mTitle = getString(R.string.title_Around);
+/*
+                targetFragment = new Fragment();
+*/
+                //setContentView(R.layout.activity_maps);
+                break;
+
+            default:
+                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                drawer.closeDrawer(GravityCompat.START);
+                return true;
+//            case R.id.nav_BotGot:
+//                targetFragment = new EventsFragment();
+//                title = getString(R.string.events_title);
+//                viewIsAtHome = false;
+//                break;
+//
+//            case R.id.nav_gallery:
+//                targetFragment = new GalleryFragment();
+//                title = getString(R.string.gallery_title);
+//                viewIsAtHome = false;
+//                break;
+        }
+
+        // Select the targetFragment.
+        fragmentManager.beginTransaction()
+                .replace(R.id.mainFrame, targetFragment)
+                .commit();
+
+          /*ToDo Refactor
+            case R.id.nav_manage:
+                toggleHideyBar();
+                break;*/
 //        // Handle navigation view item clicks here.
-//        int id = item.getItemId();
+//        int id = ;
 //
 //        if (id == R.id.nav_ShotGot) {    //Augmented Reality
 //            // Handle the camera action
@@ -235,74 +298,23 @@ public boolean onOptionsItemSelected(MenuItem item) {
 //        } else if (id == R.id.nav_share) {
 //
 //        }
-//
-//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-//        drawer.closeDrawer(GravityCompat.START);
-        displayView(item.getItemId());
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
     @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        if (hasFocus) {
-            decorView.setSystemUiVisibility(
-                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                            | View.SYSTEM_UI_FLAG_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);}
+    public void onFragmentInteraction(Uri uri) {
+
     }
 
-    public void displayView(int viewId){
-        Fragment fragment = null;
-        String title = getString(R.string.app_name);
+    @Override
+    public void onFragmentInteraction(String id) {
 
-        switch (viewId) {
+    }
 
-//        if (id == R.id.nav_ShotGot) {    //Augmented Reality
-//            // Handle the camera action
-//        } else if (id == R.id.nav_BotGot) {  //Augmented Reality
-//
-//        } else if (id == R.id.nav_WishGot) {  //Voice
-//
-//        } else if (id == R.id.nav_ShotWhat) {
-//
-//        } else if (id == R.id.nav_TrendGot) {   // Small Market
-//
-//        } else if (id == R.id.nav_AroundGot) {  //Google Maps
-//
-//        } else if (id == R.id.nav_TrendGot) {
-//
-//        } else if (id == R.id.nav_share) {
+    @Override
+    public void onFragmentInteraction(int actionId) {
 
-            case R.id.nav_manage:
-                toggleHideyBar();
-                break;
-            case R.id.nav_ShotGot:
-                setContentView(R.layout.activity_shot_got_ar);
-//                fragment = new shotGotAr();
-                title  = getString(R.string.title_activity_shot_got_ar);
-                viewIsAtHome = false;
-                break;
-
-            case R.id.nav_AroundGot:
-                setContentView(R.layout.activity_maps);
-                viewIsAtHome = false;
-                break;
-
-//            case R.id.nav_BotGot:
-//                fragment = new EventsFragment();
-//                title = getString(R.string.events_title);
-//                viewIsAtHome = false;
-//                break;
-//
-//            case R.id.nav_gallery:
-//                fragment = new GalleryFragment();
-//                title = getString(R.string.gallery_title);
-//                viewIsAtHome = false;
-//                break;
-        }
     }
 }

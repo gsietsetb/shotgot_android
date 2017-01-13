@@ -7,15 +7,35 @@
     android:fitsSystemWindows="true"
     tools:context="com.shotgot.shotgot.MainActivity">
 
-    <include layout="@layout/content_main" />
+    <include
+        layout="@layout/content_main"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" />
+
+    <include
+        layout="@layout/content_main"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
+        android:id="@+id/fabShot"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_margin="1dp"
-        app:srcCompat="@drawable/cam" />
+        android:layout_margin="0dp"
+        android:src="@drawable/shotgot"
+        app:backgroundTint="@android:color/transparent"
+        app:elevation="15dp" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabBot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|left"
+        android:layout_margin="0dp"
+        android:src="@android:drawable/ic_btn_speak_now"
+        app:backgroundTint="@android:color/transparent"
+        app:elevation="15dp" />
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -27,18 +47,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@android:color/transparent"
-            app:popupTheme="@style/AppTheme.PopupOverlay">
-            <!--
-                        <TextView
-                            android:layout_width="wrap_content"s
-                            android:layout_height="wrap_content"
-                            android:text="ShotGot"
-                            android:id="@+id/textView3"/>-->
-
-
-        </android.support.v7.widget.Toolbar>
-
-
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </android.support.design.widget.AppBarLayout>
 

@@ -3,16 +3,15 @@ package com.shotgot.shotgot;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -20,17 +19,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.shotgot.shotgot.Camera.CameraActivity;
-import com.shotgot.shotgot.Camera.NativeCameraFragment;
-import com.shotgot.shotgot.Fragment.BaseFragment;
 import com.shotgot.shotgot.Fragment.FragmentAround;
 import com.shotgot.shotgot.Fragment.FragmentShot;
 
-public class MainActivity extends CameraActivity
-        implements NavigationView.OnNavigationItemSelectedListener,
-        BaseFragment.OnFragmentInteractionListener,
-        FragmentAround.OnFragmentInteractionListener,
-        FragmentShot.OnFragmentInteractionListener {
+public class MainActivity extends ActionBarActivity implements NavigationView.OnNavigationItemSelectedListener,
+        FragmentAround.OnFragmentInteractionListener {
 
     /**
      * Actions
@@ -53,10 +46,7 @@ public class MainActivity extends CameraActivity
     private NavigationDrawerFragment mNavigationDrawerFragment;
     */
 
-    /**
-     * Used to store the last screen title. For use in {@link #restoreActionBar()}.
-     */
-    private CharSequence mTitle;
+    public CharSequence mTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,16 +68,6 @@ public class MainActivity extends CameraActivity
         setSupportActionBar(toolbar);
         toggleHideyBar();
 
-        /**Auto Shortcut to Camera mode*/
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
         /**For the Lateral menu */
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -95,8 +75,21 @@ public class MainActivity extends CameraActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        final NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        /**Auto Shortcut to Camera mode*/
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabShot);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onNavigationItemSelected(navigationView.getMenu().getItem(0));
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+            }
+        });
+
+
 
         mTitle = getTitle();
 
@@ -110,11 +103,11 @@ public class MainActivity extends CameraActivity
          (DrawerLayout) findViewById(R.id.drawer_layout));
          */
 
-        /**Fragment management */
+        /**Fragment management
         Fragment fragment = new FragmentShot(); // create a fragement object
         FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.replace(R.id.mainFrame, fragment);
-        ft.commit();
+         ft.replace(R.id.content_main, fragment);
+         ft.commit();*/
     }
 
     @Override
@@ -172,7 +165,6 @@ public class MainActivity extends CameraActivity
                 .setMessage("Are you sure you want to exit?")
                 .setNegativeButton(android.R.string.no, null)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-
                     public void onClick(DialogInterface arg0, int arg1) {
                         MainActivity.super.onBackPressed();
                     }
@@ -211,9 +203,8 @@ public class MainActivity extends CameraActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
 
-        BaseFragment targetFragment = null;
+        Fragment targetFragment = null;
         FragmentManager fragmentManager = getFragmentManager();
-
         switch (item.getItemId()) {
 //        if (id == R.id.nav_ShotGot) {    //Augmented Reality
 //            // Handle the camera action
@@ -231,24 +222,14 @@ public class MainActivity extends CameraActivity
 //
 //        } else if (id == R.id.nav_share) {
             case R.id.nav_ShotGot:
-/*
-                targetFragment = new FragmentShot.newInstance(item.getItemId());
-*/
+                targetFragment = new FragmentShot();
+                //FragmentShot.newInstance(item.getItemId());
                 mTitle = getString(R.string.title_Shot);
                 //setContentView(R.layout.activity_shot_got_ar);
                 break;
-
-            case R.id.nav_BotGot:
-                targetFragment = NativeCameraFragment.newInstance(item.getItemId());
-                mTitle = getString(R.string.title_Bot);
-                //setContentView(R.layout.activity_maps);
-                break;
-
             case R.id.nav_AroundGot:
+                targetFragment = new FragmentAround();
                 mTitle = getString(R.string.title_Around);
-/*
-                targetFragment = new Fragment();
-*/
                 //setContentView(R.layout.activity_maps);
                 break;
 
@@ -256,48 +237,55 @@ public class MainActivity extends CameraActivity
                 DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
                 drawer.closeDrawer(GravityCompat.START);
                 return true;
-//            case R.id.nav_BotGot:
-//                targetFragment = new EventsFragment();
-//                title = getString(R.string.events_title);
-//                viewIsAtHome = false;
-//                break;
-//
-//            case R.id.nav_gallery:
-//                targetFragment = new GalleryFragment();
-//                title = getString(R.string.gallery_title);
-//                viewIsAtHome = false;
-//                break;
         }
 
-        // Select the targetFragment.
+        /**Todo Refactor
+         *
+
+         case R.id.nav_BotGot:
+         targetFragment = new FragmentShot.newInst(item.getItemId());
+         mTitle = getString(R.string.title_Bot);
+         //setContentView(R.layout.activity_maps);
+         break;
+         case R.id.nav_BotGot:
+         targetFragment = new EventsFragment();
+         title = getString(R.string.events_title);
+         viewIsAtHome = false;
+         break;
+
+         case R.id.nav_gallery:
+         targetFragment = new GalleryFragment();
+         title = getString(R.string.gallery_title);
+         viewIsAtHome = false;
+         break;
+            case R.id.nav_manage:
+                toggleHideyBar();
+         break;
+         // Handle navigation view item clicks here.
+         int id = ;
+
+         if (id == R.id.nav_ShotGot) {    //Augmented Reality
+         // Handle the camera action
+         } else if (id == R.id.nav_BotGot) {  //Augmented Reality
+
+         } else if (id == R.id.nav_WishGot) {  //Voice
+
+         } else if (id == R.id.nav_ShotWhat) {
+
+         } else if (id == R.id.nav_TrendGot) {   // Small Market
+
+         } else if (id == R.id.nav_AroundGot) {  //Google Maps
+
+         } else if (id == R.id.nav_TrendGot) {
+
+         } else if (id == R.id.nav_share) {
+
+         }*/
+
+//Select the targetFragment.
         fragmentManager.beginTransaction()
                 .replace(R.id.mainFrame, targetFragment)
                 .commit();
-
-          /*ToDo Refactor
-            case R.id.nav_manage:
-                toggleHideyBar();
-                break;*/
-//        // Handle navigation view item clicks here.
-//        int id = ;
-//
-//        if (id == R.id.nav_ShotGot) {    //Augmented Reality
-//            // Handle the camera action
-//        } else if (id == R.id.nav_BotGot) {  //Augmented Reality
-//
-//        } else if (id == R.id.nav_WishGot) {  //Voice
-//
-//        } else if (id == R.id.nav_ShotWhat) {
-//
-//        } else if (id == R.id.nav_TrendGot) {   // Small Market
-//
-//        } else if (id == R.id.nav_AroundGot) {  //Google Maps
-//
-//        } else if (id == R.id.nav_TrendGot) {
-//
-//        } else if (id == R.id.nav_share) {
-//
-//        }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -305,16 +293,6 @@ public class MainActivity extends CameraActivity
 
     @Override
     public void onFragmentInteraction(Uri uri) {
-
-    }
-
-    @Override
-    public void onFragmentInteraction(String id) {
-
-    }
-
-    @Override
-    public void onFragmentInteraction(int actionId) {
 
     }
 }

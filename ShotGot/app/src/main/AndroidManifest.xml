@@ -12,7 +12,7 @@
     <!-- For AroundGot -->
     <uses-feature android:name="android.hardware.location.gps" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <!-- For BotGot -->
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
@@ -29,6 +29,7 @@
         android:icon="@drawable/shotgot"
         android:label="@string/app_name"
         android:largeHeap="true"
+        android:resizeableActivity="false"
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">

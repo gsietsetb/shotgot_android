@@ -1,12 +1,11 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/camera_preview"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:fitsSystemWindows="true"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:screenOrientation="portrait"
     android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
-    tools:context="com.shotgot.shotgot.Fragment.FragmentShot">
+    tools:context="com.shotgot.shotgot.Fragment.FragmentShotComplex">
     <!--android:layout_margin="0dp"-->
 
     <Button

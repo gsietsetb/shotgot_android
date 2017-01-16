@@ -7,38 +7,33 @@
             android:icon="@android:drawable/ic_menu_view"
             android:title="Shot" />
         <item
-            android:id="@+id/nav_ShotWhat"
-            android:icon="@drawable/quantum_ic_art_track_grey600_48"
-            android:title="ShotWhat" />
-        <item
             android:id="@+id/nav_BotGot"
             android:icon="@android:drawable/ic_btn_speak_now"
             android:title="Bot" />
         <item
-            android:id="@+id/nav_WishGot"
-            android:icon="@drawable/heart"
-            android:title="WishGot" />
-        <item
             android:id="@+id/nav_AroundGot"
             android:icon="@android:drawable/ic_menu_mylocation"
             android:title="Around" />
-
         <item
             android:id="@+id/nav_TrendGot"
-            android:icon="@android:drawable/alert_dark_frame"
-            android:title="TrendGot" />
+            android:icon="@drawable/thunder"
+            android:title="Trending" />
+        <item
+            android:id="@+id/nav_ShotWhat"
+            android:icon="@drawable/quest"
+            android:title="Reviews" />
     </group>
 
     <item android:title="Settings">
         <menu>
             <item
-                android:id="@+id/nav_share"
-                android:icon="@android:drawable/ic_menu_share"
-                android:title="Accounts" />
-            <item
                 android:id="@+id/nav_manage"
+                android:icon="@drawable/ic_menu_share"
+                android:title="Accounts Payment" />
+            <item
+                android:id="@+id/nav_share"
                 android:icon="@drawable/ic_menu_ShotWhat"
-                android:title="Payment" />
+                android:title="Accounts Payment" />
         </menu>
     </item>
 

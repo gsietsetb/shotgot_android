@@ -9,37 +9,34 @@
 
     <include
         layout="@layout/content_main"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent" />
-
-    <include
-        layout="@layout/content_main"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content" />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="-64dp" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fabShot"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_gravity="bottom|end"
         android:layout_margin="0dp"
         android:src="@drawable/shotgot"
         app:backgroundTint="@android:color/transparent"
-        app:elevation="15dp" />
+        app:elevation="15dp"
+        app:rippleColor="@android:color/transparent" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fabBot"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|left"
-        android:layout_margin="0dp"
-        android:src="@android:drawable/ic_btn_speak_now"
+        android:src="@android:drawable/ic_menu_mylocation"
         app:backgroundTint="@android:color/transparent"
         app:elevation="15dp" />
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.v7.widget.Toolbar

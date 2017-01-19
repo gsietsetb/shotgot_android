@@ -3,7 +3,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
-    tools:context="com.shotgot.shotgot.Utils.FragmentAround">
+    tools:context="com.shotgot.shotgot.Fragment.FragmentAround">
 
     <com.google.android.gms.maps.MapView
         android:id="@+id/mapView"

@@ -18,10 +18,10 @@ import static android.R.attr.height;
 import static android.R.attr.width;
 
 public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
-    Camera.Size mPreviewSize;
-    List<Camera.Size> mSupportedPreviewSizes;
-    private SurfaceHolder mHolder;
-    private Camera mCamera;
+    private final SurfaceHolder mHolder;
+    private final Camera mCamera;
+    private Camera.Size mPreviewSize;
+    private List<Camera.Size> mSupportedPreviewSizes;
 
     public CameraView(Context context, Camera camera) {
         super(context);
@@ -38,9 +38,9 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
     public void surfaceCreated(SurfaceHolder holder) {
         // The Surface has been created, now tell the camera where to draw the preview.
         try {
-            mCamera.setParameters(defineParameters());
+            mCamera.setParameters(defineParameters(mCamera.getParameters()));
             Log.d("CAMERA", "PARAMS set:");
-
+            mCamera.setDisplayOrientation(90);
             mCamera.setPreviewDisplay(holder);
             mCamera.startPreview();
         } catch (IOException e) {
@@ -49,31 +49,35 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     @NonNull
-    private Camera.Parameters defineParameters() {
-        Camera.Parameters params = mCamera.getParameters();
-
+    private Camera.Parameters defineParameters(Camera.Parameters mParams) {
         /**Sizes*/
-        mSupportedPreviewSizes = mCamera.getParameters().getSupportedPreviewSizes();
+        mPreviewSize = mParams.getPreviewSize();
+        mSupportedPreviewSizes = mParams.getSupportedPreviewSizes();
         if (mSupportedPreviewSizes != null) {
-            mPreviewSize = getOptimalPreviewSize(mSupportedPreviewSizes, width, height);
-            params.setPreviewSize(mPreviewSize.height, mPreviewSize.width);
+            mPreviewSize = getOptimalPreviewSize(mSupportedPreviewSizes,
+                    mPreviewSize.width,
+                    mPreviewSize.height);
+            if (mPreviewSize != null) {
+                mParams.setPreviewSize(mPreviewSize.width, mPreviewSize.height);
+            }
         }
+
+        /**Rotation*/
+        mParams.setRotation(0);
         Log.e("CAMERA", "PRE ROTATION - Width: " + width + " Height:" + height);
 
-        params.setRotation(0);
-
         /**Focus*/
-        params.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
+        mParams.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
 
         /**Flash*/
-        // Flash modes supported by this camera
         List<String> mSupportedFlashModes = mCamera.getParameters().getSupportedFlashModes();
         if (mSupportedFlashModes != null && mSupportedFlashModes.contains(Camera.Parameters.FLASH_MODE_AUTO)) {
-            params.setFlashMode(Camera.Parameters.FLASH_MODE_AUTO);
+            mParams.setFlashMode(Camera.Parameters.FLASH_MODE_AUTO);
         }
-        return params;
+        return mParams;
     }
 
+    //    4570465c05364e8f9b91281a74c447f3
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         final int width = resolveSize(getSuggestedMinimumWidth(), widthMeasureSpec);
@@ -119,31 +123,32 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     private Camera.Size getOptimalPreviewSize(List<Camera.Size> sizes, int w, int h) {
-        final double ASPECT_TOLERANCE = 0.1;
-        double targetRatio = (double) h / w;
+//        final double ASPECT_TOLERANCE = 0.05;
+//        double targetRatio = (double) w / h;
+        Log.d("CAM", "Entering in getOptimal with w: " + w + " and h:" + h + " for sizes" + sizes);
+        final double ASPECT_TOLERANCE = 1;//0.05;
+        double targetRatio = (double) w / h;
 
         if (sizes == null) return null;
 
         Camera.Size optimalSize = null;
         double minDiff = Double.MAX_VALUE;
 
-        int targetHeight = h;
-
         for (Camera.Size size : sizes) {
             double ratio = (double) size.width / size.height;
             if (Math.abs(ratio - targetRatio) > ASPECT_TOLERANCE) continue;
-            if (Math.abs(size.height - targetHeight) < minDiff) {
+            if (Math.abs(size.height - h) < minDiff) {
                 optimalSize = size;
-                minDiff = Math.abs(size.height - targetHeight);
+                minDiff = Math.abs(size.height - h);
             }
         }
 
         if (optimalSize == null) {
             minDiff = Double.MAX_VALUE;
             for (Camera.Size size : sizes) {
-                if (Math.abs(size.height - targetHeight) < minDiff) {
+                if (Math.abs(size.height - h) < minDiff) {
                     optimalSize = size;
-                    minDiff = Math.abs(size.height - targetHeight);
+                    minDiff = Math.abs(size.height - h);
                 }
             }
         }

@@ -16,9 +16,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.shotgot.shotgot.Fragment.FragmentAround;
 import com.shotgot.shotgot.Fragment.FragmentShot;
 import com.shotgot.shotgot.Fragment.ImmersiveModeFragment;
-import com.shotgot.shotgot.Utils.FragmentAround;
 
 public class MainActivity extends ActionBarActivity implements NavigationView.OnNavigationItemSelectedListener,
         FragmentAround.OnFragmentInteractionListener {

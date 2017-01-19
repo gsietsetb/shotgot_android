@@ -11,7 +11,7 @@
         layout="@layout/content_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="-64dp" />
+        android:layout_marginTop="-32dp" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fabShot"
@@ -43,7 +43,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@android:color/transparent"
+            android:background="@drawable/side_nav_bar"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </android.support.design.widget.AppBarLayout>

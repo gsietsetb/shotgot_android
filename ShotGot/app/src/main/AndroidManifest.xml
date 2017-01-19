@@ -16,6 +16,9 @@
     <!-- For BotGot -->
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
+    <!-- For APIs -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <!-- For pragmatically N diff camera sizes -->
     <supports-screens
         android:largeScreens="true"

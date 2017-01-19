@@ -18,4 +18,15 @@
         android:elevation="13dp"
         android:text="Shot"
         android:textColor="@android:color/holo_blue_light" />
+
+    <Button
+        android:id="@+id/Focus"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_gravity="center|center_horizontal"
+        android:layout_margin="1dp"
+        android:background="@drawable/shotgot_cutff_diamond"
+        android:elevation="13dp"
+        android:textColor="@android:color/holo_blue_light"
+        android:visibility="invisible" />
 </FrameLayout>

@@ -27,12 +27,12 @@ import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.shotgot.shotgot.R;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -122,12 +122,12 @@ public class FragmentAround extends ImmersiveModeFragment implements LocationLis
                     Log.e("MAPS", "Properly located");
                 }
                 //Update own loc
-                /*onLocationChanged(mGoogleMap.getMyLocation());
-                //mLastLocation = mGoogleMap.getMyLocation();
+                /*onLocationChanged(mGoogleMap.getMyLocation());*/
+                mLastLocation = mGoogleMap.getMyLocation();
                 if(mLastLocation!= null){
                     myLatLng = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
                     updateFromDB();
-                }*/
+                }
 
                 /**
                  * TODO Aggregate for-statement
@@ -141,9 +141,9 @@ public class FragmentAround extends ImmersiveModeFragment implements LocationLis
                 if (location != null) {
                     myLatLng = new LatLng(location.getLatitude(), location.getLongitude());
                     mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLatLng, 13));
-                    // For zooming automatically to the location of the marker
-//                    CameraPosition cameraPosition = new CameraPosition.Builder().target(arg).zoom(11).build();
-//                    mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+//                     For zooming automatically to the location of the marker
+                    CameraPosition cameraPosition = new CameraPosition.Builder().target(arg).zoom(11).build();
+                    mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
                     updateFromDB();
                 }
 
@@ -155,7 +155,7 @@ public class FragmentAround extends ImmersiveModeFragment implements LocationLis
 
     private void updateFromDB() {
         //First create N random fake values
-        final int nFakeItems = 50;
+        final int nFakeItems = 5;
         for (int i = 0; i < nFakeItems; i++) {
             addMarker(1);
             Log.d("MAPS", "Adding " + i + "-nth new fake marker");
@@ -163,29 +163,24 @@ public class FragmentAround extends ImmersiveModeFragment implements LocationLis
     }
 
     public void addMarker(int num) {
-        try {
-            mGoogleMap.addMarker(new MarkerOptions()
-                    .icon(getRandomIcon())//R.drawable.airport))
-                    .position(getRandomLocation(myLatLng, 5000, num))
-                    .flat(true)
-                    .title("Camera Reflex")
-                    .snippet("Illawong, Australia"));
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        }
+        mGoogleMap.addMarker(new MarkerOptions()
+//                .icon(getRandomIcon())//R.drawable.airport))
+                .position(getRandomLocation(myLatLng, 5000, num))
+                .flat(true)
+                .title("Camera Reflex")
+                .snippet("Illawong, Australia"));
     }
 
-    public BitmapDescriptor getRandomIcon() throws IllegalAccessException, NoSuchFieldException {
+    public BitmapDescriptor getRandomIcon() {
         final Class drawableClass = android.R.drawable.class;
 //      final Field[] fields = drawableClass.getFields();
         final Random rand = new Random();
         /**Needed to create aN.png files where N is an integer in
          * order to obtain random icons from sequencial numbers*/
-        final Field field = drawableClass.getField("a" + rand.nextInt(698));
-        return BitmapDescriptorFactory.fromResource(getResources().getDrawable(field.getInt(null));
+        int resId = getResources().getIdentifier("a" + rand.nextInt(29), "drawable", getActivity().getPackageName());
+        return BitmapDescriptorFactory.fromResource(resId);
     }
+
     private void checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -229,6 +224,7 @@ public class FragmentAround extends ImmersiveModeFragment implements LocationLis
 
         //This is to generate num random points
         for (int i = 0; i < num; i++) {
+
             double x0 = point.latitude;
             double y0 = point.longitude;
 
@@ -277,7 +273,7 @@ public class FragmentAround extends ImmersiveModeFragment implements LocationLis
          if (mGoogleApiClient != null) {
          LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
          }*/
-        updateFromDB();
+//        updateFromDB();
     }
 
     @Override

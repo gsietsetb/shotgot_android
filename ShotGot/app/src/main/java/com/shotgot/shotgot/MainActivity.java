@@ -102,6 +102,7 @@ public class MainActivity extends ActionBarActivity implements NavigationView.On
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface arg0, int arg1) {
                         MainActivity.super.onBackPressed();
+                        finish();
                     }
                 }).create().show();
 
@@ -110,7 +111,7 @@ public class MainActivity extends ActionBarActivity implements NavigationView.On
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+        getMenuInflater().inflate(R.menu.cat_items, menu);
         return true;
     }
 

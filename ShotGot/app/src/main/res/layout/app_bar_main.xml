@@ -33,19 +33,21 @@
         app:backgroundTint="@android:color/transparent"
         app:elevation="15dp" />
 
-    <android.support.design.widget.AppBarLayout
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@drawable/side_nav_bar"
+        app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    <!--android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="32dp"
         android:background="@android:color/transparent"
         android:theme="@style/AppTheme.AppBarOverlay">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@drawable/side_nav_bar"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+    </android.support.design.widget.AppBarLayout-->
 
-    </android.support.design.widget.AppBarLayout>
 
 </android.support.design.widget.CoordinatorLayout>

@@ -18,22 +18,35 @@
             android:id="@+id/nav_TrendGot"
             android:icon="@drawable/thunder"
             android:title="Trending" />
-        <item
-            android:id="@+id/nav_ShotWhat"
-            android:icon="@drawable/quest"
-            android:title="Reviews" />
+
     </group>
 
+    <item android:title="Login to browse history">
+        <menu>
+            <item
+                android:id="@+id/nav_wish"
+                android:icon="@drawable/heart"
+                android:title="WishList" />
+            <item
+                android:id="@+id/nav_hist"
+                android:icon="@android:drawable/ic_menu_recent_history"
+                android:title="History" />
+            <item
+                android:id="@+id/nav_ShotWhat"
+                android:icon="@drawable/quest"
+                android:title="Reviews" />
+        </menu>
+    </item>
     <item android:title="Settings">
         <menu>
             <item
                 android:id="@+id/nav_manage"
                 android:icon="@drawable/ic_menu_share"
-                android:title="Accounts Payment" />
+                android:title="Accounts" />
             <item
                 android:id="@+id/nav_share"
                 android:icon="@drawable/ic_menu_ShotWhat"
-                android:title="Accounts Payment" />
+                android:title="Payment Information" />
         </menu>
     </item>
 

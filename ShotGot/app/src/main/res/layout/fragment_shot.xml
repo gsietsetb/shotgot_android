@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:screenOrientation="portrait"
     android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
-    tools:context="com.shotgot.shotgot.Fragment.FragmentShotComplex">
+    tools:context="com.shotgot.shotgot.Fragment.FragmentShot">
     <!--android:layout_margin="0dp"-->
 
     <Button

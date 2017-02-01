@@ -13,6 +13,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,6 +26,8 @@ import com.shotgot.shotgot.Fragment.FragmentAround;
 import com.shotgot.shotgot.Fragment.FragmentShot;
 import com.shotgot.shotgot.Fragment.ImmersiveModeFragment;
 
+import org.opencv.android.OpenCVLoader;
+
 public class MainActivity extends ActionBarActivity implements NavigationView.OnNavigationItemSelectedListener,
         FragmentAround.OnFragmentInteractionListener {
 
@@ -32,6 +35,15 @@ public class MainActivity extends ActionBarActivity implements NavigationView.On
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
     private NavigationDrawerFragment mNavigationDrawerFragment;
     */
+    private static final String TAG = "MainActivity";
+
+    static {
+        if (!OpenCVLoader.initDebug()) {
+            Log.d(TAG, "OpenCV not loadaed");
+        } else {
+            Log.d(TAG, "OpenCV loadaed");
+        }
+    }
 
     public CharSequence mTitle;
     /**

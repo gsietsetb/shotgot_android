@@ -56,4 +56,5 @@ public class managerAPI extends AsyncTask<Void, Void, String> {
 //            Log.i("INFO", response);
 //            responseView.setText(response);
     }
+
 }

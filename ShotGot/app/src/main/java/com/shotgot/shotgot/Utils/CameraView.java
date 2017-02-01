@@ -67,7 +67,7 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
         Log.e("CAMERA", "PRE ROTATION - Width: " + width + " Height:" + height);
 
         /**Focus*/
-        mParams.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
+        mParams.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
 
         /**Flash*/
         List<String> mSupportedFlashModes = mCamera.getParameters().getSupportedFlashModes();

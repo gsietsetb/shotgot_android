@@ -10,8 +10,8 @@ import io.socket.client.Socket;
  */
 
 public class SocketPic {
-    private String host = "shotgot.com";//"192.168.1.15";
-    private String port = "3000";
+    private String host = "192.168.1.15";//"shotgot.com";//"192.168.1.15";
+    private String port = "3001";
     private Socket mSocket;
     {
         try {
@@ -20,7 +20,6 @@ public class SocketPic {
             throw new RuntimeException(e);
         }
     }
-
     public Socket getSocket() {
         return mSocket;
     }

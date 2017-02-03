@@ -168,21 +168,6 @@ public class MainActivity extends ActionBarActivity implements NavigationView.On
         ImmersiveModeFragment targetFragment;
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         switch (item.getItemId()) {
-//        if (id == R.id.nav_ShotGot) {    //Augmented Reality
-//            // Handle the camera action
-//        } else if (id == R.id.nav_BotGot) {  //Augmented Reality
-//
-//        } else if (id == R.id.nav_WishGot) {  //Voice
-//
-//        } else if (id == R.id.nav_ShotWhat) {
-//
-//        } else if (id == R.id.nav_TrendGot) {   // Small Market
-//
-//        } else if (id == R.id.nav_AroundGot) {  //Google Maps
-//
-//        } else if (id == R.id.nav_TrendGot) {
-//
-//        } else if (id == R.id.nav_share) {
             case R.id.nav_ShotGot:
                 targetFragment = new FragmentShot();
                 mTitle = getString(R.string.title_Shot);

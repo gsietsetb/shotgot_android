@@ -1,4 +1,5 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:opencv="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/camera_preview"
     android:layout_width="match_parent"
@@ -7,6 +8,14 @@
     android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
     tools:context="com.shotgot.shotgot.Fragment.FragmentShot">
     <!--android:layout_margin="0dp"-->
+
+    <org.opencv.android.JavaCameraView
+        android:id="@+id/CV_VIEW"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:visibility="gone"
+        opencv:camera_id="any"
+        opencv:show_fps="true" />
 
     <Button
         android:id="@+id/button_capture"

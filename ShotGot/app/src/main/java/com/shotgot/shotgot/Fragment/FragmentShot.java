@@ -4,6 +4,7 @@ package com.shotgot.shotgot.Fragment;
  * Created by Guillermo on 9/1/17.
  */
 
+import android.graphics.Color;
 import android.hardware.Camera;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -14,52 +15,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.TextView;
+import android.widget.GridLayout;
+import android.widget.RadioButton;
+import android.widget.RelativeLayout;
 
 import com.shotgot.shotgot.API.SocketPic;
 import com.shotgot.shotgot.R;
 import com.shotgot.shotgot.Utils.CameraView;
-
-import org.json.JSONArray;
-import org.json.JSONException;
 
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
 public class FragmentShot extends ImmersiveModeFragment {// implements CameraBridgeViewBase.CvCameraViewListener2 {
 
-    /**
-     * For NodeJS API api.shotgot.com
-     */
-    private Socket mSocket;
-    private Emitter.Listener onNewMessage = new Emitter.Listener() {
-        @Override
-        public void call(final Object... args) {
-            Log.d("Socket", "Creating Socket listener...");
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    JSONArray concepts = (JSONArray) args[0];
-                    Log.d("Socket", concepts.toString());
-//                    String username;
-//                    String message;
-//                    try {
-////                        username = data.getString("username");
-//                        message = data.getString("message");
-//                    } catch (JSONException e) {
-//                        return;
-//                    }
-
-                    // add the message to view
-                    try {
-                        addRespToFragment(concepts);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-        }
-    };
+    int posX = 0, posY = 0;
+    boolean isTags = false, isCols = false;
     /**
      * Native Android Camera
      */
@@ -70,6 +40,38 @@ public class FragmentShot extends ImmersiveModeFragment {// implements CameraBri
      * @// TODO: 2/02/17  ToBe @Deprecated
      */
     private Camera.PictureCallback mPicture;
+    /**
+     * For NodeJS API api.shotgot.com
+     */
+    private Socket mSocket;
+    private Emitter.Listener onNewClarConcept = new Emitter.Listener() {
+        @Override
+        public void call(final Object... args) {
+//            Log.d("Socket", "Creating Socket listener...");
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    String concepts = (String) args[0];
+                    Log.d("Socket", concepts);
+                    addRespToFragment(concepts);
+                }
+            });
+        }
+    };
+    private Emitter.Listener onNewClarColor = new Emitter.Listener() {
+        @Override
+        public void call(final Object... args) {
+//            Log.d("Socket", "Creating Socket listener...");
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    String col = (String) args[0];
+                    Log.d("Socket", col);
+                    addColToFragment(col);
+                }
+            });
+        }
+    };
 
     /**Safe method for getting a camera instance.
      * @return
@@ -105,11 +107,7 @@ public class FragmentShot extends ImmersiveModeFragment {// implements CameraBri
     }
     };*/
 
-    @Override
-    public void onResume() {
-        super.onResume();
-//        OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_3_2_0, this.getActivity(), mLoaderCallback);
-    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -130,6 +128,9 @@ public class FragmentShot extends ImmersiveModeFragment {// implements CameraBri
         // Socket init
         SocketPic appSocket = new SocketPic();
         mSocket = appSocket.getSocket();
+        mSocket.on("CLARIFAI_CONCEPTS", onNewClarConcept);
+        mSocket.on("CLARIFAI_COLOR", onNewClarColor);
+        mSocket.connect();
 
         // Create our Preview view and set it as the content of our activity.
         if (mCamera != null) {
@@ -171,13 +172,20 @@ public class FragmentShot extends ImmersiveModeFragment {// implements CameraBri
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+//        OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_3_2_0, this.getActivity(), mLoaderCallback);
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
         /**@deprecated ToUndo
         if (mOpenCvCameraView != null)
         mOpenCvCameraView.disableView();*/
         mSocket.disconnect();
-        mSocket.off("disconnect", onNewMessage);
+        mSocket.off("disconnect", onNewClarColor);
+        mSocket.off("disconnect", onNewClarConcept);
     }
 
     @Override
@@ -188,29 +196,39 @@ public class FragmentShot extends ImmersiveModeFragment {// implements CameraBri
         mOpenCvCameraView.disableView();*/
     }
 
-    private void addRespToFragment(JSONArray resp) throws JSONException {
-        FrameLayout layout = (FrameLayout) getActivity().findViewById(R.id.camera_preview);
-        int i;
-        for (i = 0; i < resp.length(); i++) {
-            String tag = (String) resp.get(i);
-            TextView txt = new TextView(getContext());
-            txt.setX(40);
-            txt.setText(tag);
-            layout.addView(txt);
-        }
-//        Toast.makeText(getActivity().getApplicationContext(),
-//                resp, Toast.LENGTH_LONG).show();
+    private void addRespToFragment(String tag) {
+        GridLayout layout = (GridLayout) getActivity().findViewById(R.id.tags);
+        layout.setVisibility(View.VISIBLE);
+        Button butt = new Button(getContext());
+//        posX+=40;
+//        posY+=20;
+//        butt.setY(posX);
+//        butt.setX(posY);
+        butt.setText(tag);
+        layout.addView(butt);
+    }
+
+    private void addColToFragment(String col) {
+        RelativeLayout layout = (RelativeLayout) getActivity().findViewById(R.id.colors);
+        layout.setVisibility(View.VISIBLE);
+        RadioButton rButt = new RadioButton(getContext());
+        posX += 40;
+        posY += 20;
+        rButt.setY(posX);
+        rButt.setX(posY);
+        rButt.setBackgroundColor(Color.parseColor(col));
+        layout.addView(rButt);
     }
 
     /**
      * Through Socket.io to api.shotgot.com API
      */
     private void attemptSocketSend(byte[] data) {
-        String imgString = Base64.encodeToString(data, Base64.NO_WRAP);
         Log.d("SOCKET", "[0] Going to connect to remote server");
         mSocket.connect();
+        String imgString = Base64.encodeToString(data, Base64.NO_WRAP);
         Log.d("SOCKET", "[1] Connected to remote server. Going to send: " + imgString);
-        mSocket.emit("EVENT_MESSAGE", imgString);
+        mSocket.emit("PIC_REQ", imgString);
         Log.d("SOCKET", "[2] Already sent data to remote server.");
     }
 

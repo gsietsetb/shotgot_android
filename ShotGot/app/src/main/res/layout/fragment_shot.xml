@@ -9,13 +9,13 @@
     tools:context="com.shotgot.shotgot.Fragment.FragmentShot">
     <!--android:layout_margin="0dp"-->
 
-    <org.opencv.android.JavaCameraView
-        android:id="@+id/CV_VIEW"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:visibility="gone"
-        opencv:camera_id="any"
-        opencv:show_fps="true" />
+    <!--<org.opencv.android.JavaCameraView-->
+    <!--android:id="@+id/CV_VIEW"-->
+    <!--android:layout_width="fill_parent"-->
+    <!--android:layout_height="fill_parent"-->
+    <!--android:visibility="gone"-->
+    <!--opencv:camera_id="any"-->
+    <!--opencv:show_fps="true" />-->
 
     <Button
         android:id="@+id/button_capture"
@@ -27,4 +27,48 @@
         android:elevation="13dp"
         android:text="Shot"
         android:textColor="@android:color/holo_blue_light" />
+
+    <GridLayout
+        android:id="@+id/tags"
+        android:layout_width="202dp"
+        android:layout_height="247dp"
+        android:layout_gravity="center"
+        android:elevation="15dp"
+        android:visibility="invisible">
+
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tags:" />
+
+    </GridLayout>
+
+    <RelativeLayout
+        android:id="@+id/colors"
+        android:layout_width="292dp"
+        android:layout_height="85dp"
+        android:layout_gravity="center|bottom"
+        android:layout_marginBottom="50dp"
+        android:background="@drawable/cast_expanded_controller_bg_gradient_light"
+        android:elevation="15dp"
+        android:visibility="invisible">
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Colors:" />
+
+        <ImageButton
+            android:id="@+id/imageButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="19dp"
+            opencv:srcCompat="@android:color/holo_blue_bright" />
+    </RelativeLayout>
+
+
 </FrameLayout>

@@ -5,13 +5,16 @@ package com.shotgot.shotgot.Utils;
  */
 
 import android.content.Context;
+import android.graphics.Rect;
 import android.hardware.Camera;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import static android.R.attr.height;
@@ -67,7 +70,25 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
         Log.e("CAMERA", "PRE ROTATION - Width: " + width + " Height:" + height);
 
         /**Focus*/
-        mParams.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
+        List<String> focusModes = mParams.getSupportedFocusModes();
+        if (focusModes.contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE)) {
+            mParams.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
+        } else {
+            mParams.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
+        }
+        Rect centerRect = new Rect(
+                (this.getWidth() / 2 - 100),
+                (this.getHeight() / 2 - 100),
+                (this.getWidth() / 2 + 100),
+                (this.getHeight() / 2 + 100));
+        final Rect targetFocusRect = new Rect(
+                centerRect.left * 2000 / this.getWidth() - 1000,
+                centerRect.top * 2000 / this.getHeight() - 1000,
+                centerRect.right * 2000 / this.getWidth() - 1000,
+                centerRect.bottom * 2000 / this.getHeight() - 1000);
+        ArrayList<Camera.Area> focusAreas = new ArrayList<Camera.Area>();
+        focusAreas.add(new Camera.Area(targetFocusRect, 1000));
+        mParams.setFocusAreas(focusAreas);
 
         /**Flash*/
         List<String> mSupportedFlashModes = mCamera.getParameters().getSupportedFlashModes();
@@ -77,7 +98,32 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
         return mParams;
     }
 
-    //    4570465c05364e8f9b91281a74c447f3
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            float x = event.getX();
+            float y = event.getY();
+
+            Rect touchRect = new Rect(
+                    (int) (x - 100),
+                    (int) (y - 100),
+                    (int) (x + 100),
+                    (int) (y + 100));
+
+            final Rect targetFocusRect = new Rect(
+                    touchRect.left * 2000 / this.getWidth() - 1000,
+                    touchRect.top * 2000 / this.getHeight() - 1000,
+                    touchRect.right * 2000 / this.getWidth() - 1000,
+                    touchRect.bottom * 2000 / this.getHeight() - 1000);
+            ArrayList<Camera.Area> focusAreas = new ArrayList<Camera.Area>();
+            focusAreas.add(new Camera.Area(targetFocusRect, 1000));
+            Camera.Parameters mParams = mCamera.getParameters();
+            mParams.setFocusAreas(focusAreas);
+            mCamera.setParameters(mParams);
+        }
+        return false;
+    }
+
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         final int width = resolveSize(getSuggestedMinimumWidth(), widthMeasureSpec);

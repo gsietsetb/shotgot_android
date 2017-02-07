@@ -13,11 +13,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.GridLayout;
 import android.widget.RadioButton;
-import android.widget.RelativeLayout;
 
 import com.shotgot.shotgot.API.SocketPic;
 import com.shotgot.shotgot.R;
@@ -26,10 +26,18 @@ import com.shotgot.shotgot.Utils.CameraView;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
+import static com.shotgot.shotgot.R.id.tags;
+
 public class FragmentShot extends ImmersiveModeFragment {// implements CameraBridgeViewBase.CvCameraViewListener2 {
 
-    int posX = 0, posY = 0;
-    boolean isTags = false, isCols = false;
+    private int nTags = 0, nColorsClarifai = 0;
+    private boolean isTags = false, isCols = false, previousSearch = false;
+    private GridLayout tagsLayout;
+    private GridLayout colorsLayout;
+    private ArrayAdapter<String> adapter;
+    private String[] foundTags;
+
+
     /**
      * Native Android Camera
      */
@@ -40,11 +48,18 @@ public class FragmentShot extends ImmersiveModeFragment {// implements CameraBri
      * @// TODO: 2/02/17  ToBe @Deprecated
      */
     private Camera.PictureCallback mPicture;
-    /**
+    /**) {
+    @Override public void run() {
+    String name = (String) args[0];
+    Log.d("SocketClousight", name);
+    addRespLayout(name);
+    }
+    });
+     }
      * For NodeJS API api.shotgot.com
      */
     private Socket mSocket;
-    private Emitter.Listener onNewClarConcept = new Emitter.Listener() {
+    private Emitter.Listener onCloudsightResp = new Emitter.Listener() {
         @Override
         public void call(final Object... args) {
 //            Log.d("Socket", "Creating Socket listener...");
@@ -53,21 +68,103 @@ public class FragmentShot extends ImmersiveModeFragment {// implements CameraBri
                 public void run() {
                     String concepts = (String) args[0];
                     Log.d("Socket", concepts);
-                    addRespToFragment(concepts);
+                    addRespLayout(concepts);
                 }
             });
         }
     };
-    private Emitter.Listener onNewClarColor = new Emitter.Listener() {
+    private Emitter.Listener onClarifaiTagResp = new Emitter.Listener() {
         @Override
         public void call(final Object... args) {
 //            Log.d("Socket", "Creating Socket listener...");
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+                    //In order to prevent double params
+                    previousSearch = true;
+                    String concepts = (String) args[0];
+                    Log.d("Socket", concepts);
+                    addRespLayout(concepts);
+                }
+            });
+        }
+    };
+    private Emitter.Listener onGoogleTagResp = new Emitter.Listener() {
+        @Override
+        public void call(final Object... args) {
+//            Log.d("Socket", "Creating Socket listener...");
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    //In order to prevent double params
+                    previousSearch = true;
+                    String concepts = (String) args[0];
+                    Log.d("Socket", concepts);
+                    addRespLayout(concepts);
+                }
+            });
+        }
+    };
+    private Emitter.Listener onGoogleLogoResp = new Emitter.Listener() {
+        @Override
+        public void call(final Object... args) {
+//            Log.d("Socket", "Creating Socket listener...");
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    //In order to prevent double params
+                    previousSearch = true;
+                    String concepts = (String) args[0];
+                    Log.d("Socket", concepts);
+                    addRespLayout(concepts);
+                }
+            });
+        }
+    };
+
+    private Emitter.Listener onGoogleLabelResp = new Emitter.Listener() {
+        @Override
+        public void call(final Object... args) {
+//            Log.d("Socket", "Creating Socket listener...");
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    //In order to prevent double params
+                    previousSearch = true;
+                    String concepts = (String) args[0];
+                    Log.d("Socket", concepts);
+                    addRespLayout(concepts);
+                }
+            });
+        }
+    };
+    private Emitter.Listener onGoogleTextResp = new Emitter.Listener() {
+        @Override
+        public void call(final Object... args) {
+//            Log.d("Socket", "Creating Socket listener...");
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    //In order to prevent double params
+                    previousSearch = true;
+                    String concepts = (String) args[0];
+                    Log.d("Socket", concepts);
+                    addRespLayout(concepts);
+                }
+            });
+        }
+    };
+    private Emitter.Listener onClarifaiColorResp = new Emitter.Listener() {
+        @Override
+        public void call(final Object... args) {
+//            Log.d("Socket", "Creating Socket listener...");
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    previousSearch = true;
                     String col = (String) args[0];
                     Log.d("Socket", col);
-                    addColToFragment(col);
+                    addRespColorLayout(col);
                 }
             });
         }
@@ -107,8 +204,6 @@ public class FragmentShot extends ImmersiveModeFragment {// implements CameraBri
     }
     };*/
 
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -116,7 +211,7 @@ public class FragmentShot extends ImmersiveModeFragment {// implements CameraBri
 
         /**OpenCV Camera version
          getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON | WindowManager.LayoutParams.FLAG_FULLSCREEN);
-         //        getActivity().setContentView(R.layout.fragment_computer_vision);
+         //        getActivity().setContentView(R.colorsLayout.fragment_computer_vision);
          mOpenCvCameraView = (CameraBridgeViewBase) view.findViewById(R.id.CV_VIEW);
          mOpenCvCameraView.setVisibility(SurfaceView.VISIBLE);
          mOpenCvCameraView.setCvCameraViewListener(this);*/
@@ -128,8 +223,12 @@ public class FragmentShot extends ImmersiveModeFragment {// implements CameraBri
         // Socket init
         SocketPic appSocket = new SocketPic();
         mSocket = appSocket.getSocket();
-        mSocket.on("CLARIFAI_CONCEPTS", onNewClarConcept);
-        mSocket.on("CLARIFAI_COLOR", onNewClarColor);
+        mSocket.on("CLOUDSIGHT", onCloudsightResp);
+        mSocket.on("CLARIFAI_CONCEPTS", onClarifaiTagResp);
+        mSocket.on("CLARIFAI_COLOR", onClarifaiColorResp);
+        mSocket.on("GOOGLE_LOGOS", onGoogleLogoResp);
+        mSocket.on("GOOGLE_LABELS", onGoogleLabelResp);
+        mSocket.on("GOOGLE_TEXT", onGoogleTextResp);
         mSocket.connect();
 
         // Create our Preview view and set it as the content of our activity.
@@ -139,8 +238,8 @@ public class FragmentShot extends ImmersiveModeFragment {// implements CameraBri
                 @Override
                 public void onPictureTaken(byte[] data, Camera camera) {
                     //Todo get the base 64 string
-                    //TODO JSONObject dataJSON = new JSONObject();
-                    attemptSocketSend(data);
+//                    data = data.Bitmap.CompressFormat.JPEG, 100, data)
+                    attemptSocketSendImg(data);
                 }
             };
 
@@ -154,7 +253,7 @@ public class FragmentShot extends ImmersiveModeFragment {// implements CameraBri
                         }
                     }
             );
-            camera_view.addView(mCameraView);//add the SurfaceView to the layout
+            camera_view.addView(mCameraView);//add the SurfaceView to the colorsLayout
 
             // Trap the capture button.
             Button captureButton = (Button) view.findViewById(R.id.button_capture);
@@ -171,6 +270,64 @@ public class FragmentShot extends ImmersiveModeFragment {// implements CameraBri
         return view;
     }
 
+    /*public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            if (requestCode == CAMERA_CAPTURE) {
+                // get the Uri for the captured image
+                picUri = data.getData();
+                performCrop();
+            }
+            // user is returning from cropping the image
+            else if (requestCode == CROP_PIC) {
+                // get the returned data
+                Bundle extras = data.getExtras();
+                // get the cropped bitmap
+                Bitmap thePic = extras.getParcelable("data");
+                /**Compress the cropped image afterwards/
+                ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+                thePic.compress(Bitmap.CompressFormat.JPEG, 100, byteStream);
+                byte[] bytes = new byte[0];
+                byteStream.write(bytes, 0, bytes.length);
+                attemptSocketSendImg(bytes);
+//                ImageView picView = (ImageView) findViewById(R.id.picture);
+//                picView.setImageBitmap(thePic);
+            }
+        }
+    }*/
+
+    /**
+     * this function does the crop operation.
+     * <p>
+     * private void performCrop() {
+     * // take care of exceptions
+     * try {
+     * // call the standard crop action intent (the user device may not
+     * // support it)
+     * Intent cropIntent = new Intent("com.android.camera.action.CROP");
+     * // indicate image type and Uri
+     * cropIntent.setDataAndType(picUri, "image/*");
+     * // set crop properties
+     * cropIntent.putExtra("crop", "true");
+     * // indicate aspect of desired crop
+     * cropIntent.putExtra("aspectX", 2);
+     * cropIntent.putExtra("aspectY", 1);
+     * // indicate output X and Y
+     * cropIntent.putExtra("outputX", 256);
+     * cropIntent.putExtra("outputY", 256);
+     * // retrieve data on return
+     * cropIntent.putExtra("return-data", true);
+     * // start the activity - we handle returning in onActivityResult
+     * startActivityForResult(cropIntent, CROP_PIC);
+     * }
+     * // respond to users whose devices do not support the crop action
+     * catch (ActivityNotFoundException anfe) {
+     * Toast toast = Toast
+     * .makeText(getContext(), "This device doesn't support the crop action!", Toast.LENGTH_SHORT);
+     * toast.show();
+     * }
+     * }
+     */
+
     @Override
     public void onResume() {
         super.onResume();
@@ -184,8 +341,12 @@ public class FragmentShot extends ImmersiveModeFragment {// implements CameraBri
         if (mOpenCvCameraView != null)
         mOpenCvCameraView.disableView();*/
         mSocket.disconnect();
-        mSocket.off("disconnect", onNewClarColor);
-        mSocket.off("disconnect", onNewClarConcept);
+        mSocket.off("disconnect", onClarifaiColorResp);
+        mSocket.off("disconnect", onClarifaiTagResp);
+        mSocket.off("disconnect", onCloudsightResp);
+        mSocket.off("disconnect", onGoogleLogoResp);
+        mSocket.off("disconnect", onGoogleTagResp);
+        mSocket.off("disconnect", onGoogleLabelResp);
     }
 
     @Override
@@ -196,34 +357,24 @@ public class FragmentShot extends ImmersiveModeFragment {// implements CameraBri
         mOpenCvCameraView.disableView();*/
     }
 
-    private void addRespToFragment(String tag) {
-        GridLayout layout = (GridLayout) getActivity().findViewById(R.id.tags);
-        layout.setVisibility(View.VISIBLE);
+    private void addRespLayout(String tag) {
         Button butt = new Button(getContext());
-//        posX+=40;
-//        posY+=20;
-//        butt.setY(posX);
-//        butt.setX(posY);
+        butt.setBackgroundColor(getResources().getColor(R.color.transp_dark_background));
+        butt.setTextColor(getResources().getColor(R.color.wallet_holo_blue_light));
         butt.setText(tag);
-        layout.addView(butt);
+        tagsLayout.addView(butt, ++nTags);
     }
 
-    private void addColToFragment(String col) {
-        RelativeLayout layout = (RelativeLayout) getActivity().findViewById(R.id.colors);
-        layout.setVisibility(View.VISIBLE);
+    private void addRespColorLayout(String col) {
         RadioButton rButt = new RadioButton(getContext());
-        posX += 40;
-        posY += 20;
-        rButt.setY(posX);
-        rButt.setX(posY);
         rButt.setBackgroundColor(Color.parseColor(col));
-        layout.addView(rButt);
+        colorsLayout.addView(rButt, ++nColorsClarifai);
     }
 
     /**
      * Through Socket.io to api.shotgot.com API
      */
-    private void attemptSocketSend(byte[] data) {
+    private void attemptSocketSendImg(byte[] data) {
         Log.d("SOCKET", "[0] Going to connect to remote server");
         mSocket.connect();
         String imgString = Base64.encodeToString(data, Base64.NO_WRAP);
@@ -234,6 +385,33 @@ public class FragmentShot extends ImmersiveModeFragment {// implements CameraBri
 
     /**PostProcess Captured Img, i.e crop it?*/
     private void getPicResults() {
+        /**Delete previous matches from the screen*/
+        if (!previousSearch) {
+//            foundTags = new String[]{"Tags"};
+//            adapter = new ArrayAdapter<>(getContext(),
+//                    android.R.layout.simple_list_item_1,
+//                    foundTags);
+//            tagsLayout.setAdapter(adapter);
+            tagsLayout = (GridLayout) getActivity().findViewById(tags);
+            tagsLayout.setVisibility(View.VISIBLE);
+            colorsLayout = (GridLayout) getActivity().findViewById(R.id.colors);
+            colorsLayout.setVisibility(View.VISIBLE);
+        } else {
+            tagsLayout.removeViews(0, nTags);
+            colorsLayout.removeViews(0, nColorsClarifai);
+        }
+        /**Attempt to Crop
+         try {
+         // use standard intent to capture an image
+         Intent captureIntent = new Intent(
+         MediaStore.ACTION_IMAGE_CAPTURE);
+         // we will handle the returned data in onActivityResult
+         startActivityForResult(captureIntent, CAMERA_CAPTURE);
+         } catch (ActivityNotFoundException anfe) {
+         Toast toast = Toast.makeText(getContext(), "This device doesn't support the crop action!",
+         Toast.LENGTH_SHORT);
+         toast.show();
+         } */
         mCamera.takePicture(null, null, mPicture);
 
         /**Play camera's Beep sound*/

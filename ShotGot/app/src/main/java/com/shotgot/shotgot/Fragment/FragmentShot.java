@@ -13,7 +13,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.GridLayout;
@@ -23,6 +22,9 @@ import com.shotgot.shotgot.API.SocketPic;
 import com.shotgot.shotgot.R;
 import com.shotgot.shotgot.Utils.CameraView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
@@ -31,12 +33,9 @@ import static com.shotgot.shotgot.R.id.tags;
 public class FragmentShot extends ImmersiveModeFragment {// implements CameraBridgeViewBase.CvCameraViewListener2 {
 
     private int nTags = 0, nColorsClarifai = 0;
-    private boolean isTags = false, isCols = false, previousSearch = false;
+    private boolean previousSearch = false;
     private GridLayout tagsLayout;
     private GridLayout colorsLayout;
-    private ArrayAdapter<String> adapter;
-    private String[] foundTags;
-
 
     /**
      * Native Android Camera
@@ -52,119 +51,31 @@ public class FragmentShot extends ImmersiveModeFragment {// implements CameraBri
     @Override public void run() {
     String name = (String) args[0];
     Log.d("SocketClousight", name);
-    addRespLayout(name);
+    addRespLabels(name);
     }
     });
      }
      * For NodeJS API api.shotgot.com
      */
     private Socket mSocket;
-    private Emitter.Listener onCloudsightResp = new Emitter.Listener() {
-        @Override
-        public void call(final Object... args) {
-//            Log.d("Socket", "Creating Socket listener...");
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    String concepts = (String) args[0];
-                    Log.d("Socket", concepts);
-                    addRespLayout(concepts);
-                }
-            });
-        }
-    };
-    private Emitter.Listener onClarifaiTagResp = new Emitter.Listener() {
-        @Override
-        public void call(final Object... args) {
-//            Log.d("Socket", "Creating Socket listener...");
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    //In order to prevent double params
-                    previousSearch = true;
-                    String concepts = (String) args[0];
-                    Log.d("Socket", concepts);
-                    addRespLayout(concepts);
-                }
-            });
-        }
-    };
-    private Emitter.Listener onGoogleTagResp = new Emitter.Listener() {
-        @Override
-        public void call(final Object... args) {
-//            Log.d("Socket", "Creating Socket listener...");
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    //In order to prevent double params
-                    previousSearch = true;
-                    String concepts = (String) args[0];
-                    Log.d("Socket", concepts);
-                    addRespLayout(concepts);
-                }
-            });
-        }
-    };
-    private Emitter.Listener onGoogleLogoResp = new Emitter.Listener() {
-        @Override
-        public void call(final Object... args) {
-//            Log.d("Socket", "Creating Socket listener...");
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    //In order to prevent double params
-                    previousSearch = true;
-                    String concepts = (String) args[0];
-                    Log.d("Socket", concepts);
-                    addRespLayout(concepts);
-                }
-            });
-        }
-    };
 
-    private Emitter.Listener onGoogleLabelResp = new Emitter.Listener() {
+    private Emitter.Listener onMetadataResp = new Emitter.Listener() {
         @Override
         public void call(final Object... args) {
-//            Log.d("Socket", "Creating Socket listener...");
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    //In order to prevent double params
-                    previousSearch = true;
-                    String concepts = (String) args[0];
-                    Log.d("Socket", concepts);
-                    addRespLayout(concepts);
-                }
-            });
-        }
-    };
-    private Emitter.Listener onGoogleTextResp = new Emitter.Listener() {
-        @Override
-        public void call(final Object... args) {
-//            Log.d("Socket", "Creating Socket listener...");
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    //In order to prevent double params
-                    previousSearch = true;
-                    String concepts = (String) args[0];
-                    Log.d("Socket", concepts);
-                    addRespLayout(concepts);
-                }
-            });
-        }
-    };
-    private Emitter.Listener onClarifaiColorResp = new Emitter.Listener() {
-        @Override
-        public void call(final Object... args) {
-//            Log.d("Socket", "Creating Socket listener...");
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     previousSearch = true;
-                    String col = (String) args[0];
-                    Log.d("Socket", col);
-                    addRespColorLayout(col);
+                    JSONObject metadata = (JSONObject) args[0];
+                    Log.d("Socket", "Rx Response");
+                    Log.d("Socket", metadata.toString());
+                    try {
+                        if (metadata.getString("type").equals("Color"))
+                            addRespColorLayout(metadata.getJSONObject("data"));
+                        else addRespLabels(metadata.getJSONObject("data"));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             });
         }
@@ -223,12 +134,7 @@ public class FragmentShot extends ImmersiveModeFragment {// implements CameraBri
         // Socket init
         SocketPic appSocket = new SocketPic();
         mSocket = appSocket.getSocket();
-        mSocket.on("CLOUDSIGHT", onCloudsightResp);
-        mSocket.on("CLARIFAI_CONCEPTS", onClarifaiTagResp);
-        mSocket.on("CLARIFAI_COLOR", onClarifaiColorResp);
-        mSocket.on("GOOGLE_LOGOS", onGoogleLogoResp);
-        mSocket.on("GOOGLE_LABELS", onGoogleLabelResp);
-        mSocket.on("GOOGLE_TEXT", onGoogleTextResp);
+        mSocket.on("METADATA", onMetadataResp);
         mSocket.connect();
 
         // Create our Preview view and set it as the content of our activity.
@@ -341,12 +247,7 @@ public class FragmentShot extends ImmersiveModeFragment {// implements CameraBri
         if (mOpenCvCameraView != null)
         mOpenCvCameraView.disableView();*/
         mSocket.disconnect();
-        mSocket.off("disconnect", onClarifaiColorResp);
-        mSocket.off("disconnect", onClarifaiTagResp);
-        mSocket.off("disconnect", onCloudsightResp);
-        mSocket.off("disconnect", onGoogleLogoResp);
-        mSocket.off("disconnect", onGoogleTagResp);
-        mSocket.off("disconnect", onGoogleLabelResp);
+        mSocket.off("disconnect", onMetadataResp);
     }
 
     @Override
@@ -357,17 +258,17 @@ public class FragmentShot extends ImmersiveModeFragment {// implements CameraBri
         mOpenCvCameraView.disableView();*/
     }
 
-    private void addRespLayout(String tag) {
+    private void addRespLabels(JSONObject labels) throws JSONException {
         Button butt = new Button(getContext());
         butt.setBackgroundColor(getResources().getColor(R.color.transp_dark_background));
         butt.setTextColor(getResources().getColor(R.color.wallet_holo_blue_light));
-        butt.setText(tag);
+        butt.setText((String) labels.get("data"));
         tagsLayout.addView(butt, ++nTags);
     }
 
-    private void addRespColorLayout(String col) {
+    private void addRespColorLayout(JSONObject col) throws JSONException {
         RadioButton rButt = new RadioButton(getContext());
-        rButt.setBackgroundColor(Color.parseColor(col));
+        rButt.setBackgroundColor(Color.parseColor(col.getString("data")));
         colorsLayout.addView(rButt, ++nColorsClarifai);
     }
 

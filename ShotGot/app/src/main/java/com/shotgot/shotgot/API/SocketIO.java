@@ -9,7 +9,7 @@ import io.socket.client.Socket;
  * Created by gsierra on 31/01/17.
  */
 
-public class SocketPic {
+public class SocketIO {
     private String host = "shotgot.com";//"192.168.1.15";
     private String port = "3001";
     private Socket mSocket;

@@ -23,8 +23,8 @@ import static android.R.attr.width;
 public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
     private final SurfaceHolder mHolder;
     private final Camera mCamera;
-    private Camera.Size mPreviewSize;
-    private List<Camera.Size> mSupportedPreviewSizes;
+    private Camera.Size mPreviewSize, mPicSize;
+    private List<Camera.Size> mSupportedPreviewSizes, mSupportedSizes;
 
     public CameraView(Context context, Camera camera) {
         super(context);
@@ -36,6 +36,21 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
         mHolder.addCallback(this);
         // deprecated setting, but required on Android versions prior to 3.0
         mHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+    }
+
+    /**
+     * Safe method for getting a camera instance.
+     *
+     * @return
+     */
+    public static Camera getCameraInstance() {
+        Camera c = null;
+        try {
+            c = Camera.open(); // attempt to get a Camera instance
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return c; // returns null if camera is unavailable
     }
 
     public void surfaceCreated(SurfaceHolder holder) {
@@ -51,6 +66,65 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
         }
     }
 
+    /**OpenCV Camera
+     private CameraBridgeViewBase mOpenCvCameraView;
+
+     private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this.getActivity()) {
+    @Override public void onManagerConnected(int status){
+    switch (status){
+    case LoaderCallbackInterface.SUCCESS:
+    {
+    Log.i("CameraCV", "OpenCV loaded Successfully");
+    mOpenCvCameraView.enableView();
+    }
+    break;
+    default:
+    {
+    super.onManagerConnected(status);
+    }
+    break;
+    }
+    }
+    };*/
+
+    /**
+     * This method is invoked when camera preview has started. After this method is invoked
+     * the frames will start to be delivered to client via the onCameraFrame() callback.
+     *
+     * @param width  -  the width of the frames that will be delivered
+     * @param height - the height of the frames that will be delivered
+
+     @Override public void onCameraViewStarted(int width, int height) {
+
+     } */
+
+    /**
+     * This method is invoked when camera preview has been stopped for some reason.
+     * No frames will be delivered via onCameraFrame() callback after this method is called.
+
+     @Override public void onCameraViewStopped() {
+
+     }*/
+
+    /**
+     * This method is invoked when delivery of the frame needs to be done.
+     * The returned values - is a modified frame which needs to be displayed on the screen.
+     * TODO: pass the parameters specifying the format of the frame (BPP, YUV or RGB and etc)
+     * <p>
+     * //     * @param inputFrame
+     */
+//    @Override
+//    public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
+//        /**ImgProcessing on RT*/
+//        Mat rgba = inputFrame.rgba();
+////        Utils.bitmapToMat(inputFrame, rgba);
+//        /**EdgeDetection Feature*/
+//        Mat edges = new Mat(rgba.size(), CvType.CV_8UC1);
+//        Imgproc.cvtColor(rgba, edges, Imgproc.COLOR_RGB2GRAY, 4);
+//        Imgproc.Canny(edges, edges, 80, 100);
+//        return inputFrame.rgba();
+//    }
+
     @NonNull
     private Camera.Parameters defineParameters(Camera.Parameters mParams) {
         /**Sizes*/
@@ -62,6 +136,17 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
                     mPreviewSize.height);
             if (mPreviewSize != null) {
                 mParams.setPreviewSize(mPreviewSize.width, mPreviewSize.height);
+            }
+        }
+
+        /**ImgSizes*/
+        mSupportedSizes = mParams.getSupportedPictureSizes();
+        mParams.getPreviewSize();
+        if (mSupportedSizes != null) {
+            Log.d("ImgSize", mSupportedSizes.toString());
+            mPicSize = mSupportedSizes.get(mSupportedSizes.size() - 1);
+            if (mPicSize != null) {
+                mParams.setPictureSize(mPicSize.width,mPicSize.height);
             }
         }
 

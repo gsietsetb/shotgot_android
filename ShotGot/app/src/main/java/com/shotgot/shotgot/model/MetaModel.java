@@ -23,7 +23,7 @@ public class MetaModel {
         this.mId = id;
         this.mCv_api = cv_api;
         this.mType = mType;
-        this.mData = data;
+        this.mData = (data != null) ? data : new ArrayList();
     }
 
     public boolean isColor() {

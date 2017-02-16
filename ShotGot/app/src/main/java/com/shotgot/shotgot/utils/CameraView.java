@@ -20,8 +20,11 @@ import static android.R.attr.width;
 public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
     private final SurfaceHolder mHolder;
     private final Camera mCamera;
+    public boolean hasFlash = true;
+    public boolean flashOn = false;
     private Camera.Size mPreviewSize, mPicSize;
     private List<Camera.Size> mSupportedPreviewSizes, mSupportedSizes;
+    private List<String> mSupportedFlashModes;
 
     public CameraView(Context context, Camera camera) {
         super(context);
@@ -65,26 +68,27 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 
     /**
      * OpenCV Camera
-     private CameraBridgeViewBase mOpenCvCameraView;
-
-     private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this.getActivity()) {
-    @Override public void onManagerConnected(int status){
-    switch (status){
-    case LoaderCallbackInterface.SUCCESS:
-    {
-    Log.i("CameraCV", "OpenCV loaded Successfully");
-    mOpenCvCameraView.enableView();
-    }
-    break;
-    default:
-    {
-    super.onManagerConnected(status);
-    }
-    break;
-    }
-    }
-    };
      */
+//    private CameraBridgeViewBase mOpenCvCameraView;
+//
+//    private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this.getActivity()) {
+//        @Override public void onManagerConnected(int status){
+//            switch (status){
+//                case LoaderCallbackInterface.SUCCESS:
+//                {
+//                    Log.i("CameraCV", "OpenCV loaded Successfully");
+//                    mOpenCvCameraView.enableView();
+//                }
+//                break;
+//                default:
+//                {
+//                    super.onManagerConnected(status);
+//                }
+//                break;
+//            }
+//        }
+//    };
+
 
     /**
      * This method is invoked when camera preview has started. After this method is invoked
@@ -92,18 +96,18 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
      *
      * @param width  -  the width of the frames that will be delivered
      * @param height - the height of the frames that will be delivered
-
-     @Override public void onCameraViewStarted(int width, int height) {
-
-     } */
+     */
+//     @Override public void onCameraViewStarted(int width, int height) {
+//
+//     }
 
     /**
      * This method is invoked when camera preview has been stopped for some reason.
      * No frames will be delivered via onCameraFrame() callback after this method is called.
-
-     @Override public void onCameraViewStopped() {
-
-     }*/
+     */
+//     @Override public void onCameraViewStopped() {
+//
+//     }
 
     /**
      * This method is invoked when delivery of the frame needs to be done.
@@ -111,10 +115,10 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
      * TODO: pass the parameters specifying the format of the frame (BPP, YUV or RGB and etc)
      * <p>
      * //     * @param inputFrame
-     */
-//    @Override
-//    public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
-//        /**ImgProcessing on RT*/
+
+     //    @Override
+     //    public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
+     //        /**ImgProcessing on RT*/
 //        Mat rgba = inputFrame.rgba();
 ////        Utils.bitmapToMat(inputFrame, rgba);
 //        /**EdgeDetection Feature*/
@@ -122,7 +126,7 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 //        Imgproc.cvtColor(rgba, edges, Imgproc.COLOR_RGB2GRAY, 4);
 //        Imgproc.Canny(edges, edges, 80, 100);
 //        return inputFrame.rgba();
-//    }
+//    }*/
 
     @NonNull
     private Camera.Parameters defineParameters(Camera.Parameters mParams) {
@@ -175,15 +179,18 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 //        ArrayList<Camera.Area> focusAreas = new ArrayList<Camera.Area>();
 //        focusAreas.add(new Camera.Area(targetFocusRect, 1000));
 //        mParams.setFocusAreas(focusAreas);
-
         /**Flash*/
-        List<String> mSupportedFlashModes = mCamera.getParameters().getSupportedFlashModes();
-        if (mSupportedFlashModes != null && mSupportedFlashModes.contains(Camera.Parameters.FLASH_MODE_AUTO)) {
+        mSupportedFlashModes = mCamera.getParameters().getSupportedFlashModes();
+        if (mSupportedFlashModes != null &&
+                mSupportedFlashModes.contains(Camera.Parameters.FLASH_MODE_AUTO)) {
             mParams.setFlashMode(Camera.Parameters.FLASH_MODE_AUTO);
+        } else {
+            hasFlash = false;
         }
         return mParams;
     }
-//    @Override
+
+    //    @Override
 //    public boolean onTouchEvent(MotionEvent event) {
 //        if (event.getAction() == MotionEvent.ACTION_DOWN) {
 //            float x = event.getX();
@@ -208,6 +215,38 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 //        }
 //        return false;
 //    }
+    public void toggleFlash() {
+        Camera.Parameters mParameters = mCamera.getParameters();
+        String aux = getFlashMode();
+        mParameters.setFlashMode(aux);
+        mCamera.setParameters(mParameters);
+        Log.d("CAM_FLASH", "Setting " + aux);
+    }
+
+    /**
+     * Method to obtain, in order to be set aftewards,
+     * the most powerful flash among the supported ones
+     *
+     * @return String of type Camera.Parameters which
+     * identifies the target flash mode
+     */
+    public String getFlashMode() {
+        if (hasFlash) {
+            if (!flashOn) {
+                flashOn = true;
+                return mSupportedFlashModes.contains(Camera.Parameters.FLASH_MODE_TORCH) ?
+                        Camera.Parameters.FLASH_MODE_TORCH :
+                        mSupportedFlashModes.contains(Camera.Parameters.FLASH_MODE_RED_EYE) ?
+                                Camera.Parameters.FLASH_MODE_RED_EYE :
+                                Camera.Parameters.FLASH_MODE_ON;
+            } else {
+                /**After pressing twice, it sets Back to AUTO (default)*/
+                flashOn = false;
+                return Camera.Parameters.FLASH_MODE_AUTO;
+            }
+        }
+        return Camera.Parameters.FLASH_MODE_OFF;
+    }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {

@@ -5,16 +5,15 @@ package com.shotgot.shotgot.fragment;
  */
 
 import android.hardware.Camera;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.GridLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -35,6 +34,7 @@ public class FragmentShot extends ImmersiveModeFragment {// implements CameraBri
 
     ArrayList<MetaModel> metaList = new ArrayList<MetaModel>();
     private boolean previousSearch = false;
+    private boolean retryFocus = false;
     private GridLayout tagsLayout;
     private GridLayout colorsLayout;
     private Random rand = new Random();
@@ -88,7 +88,7 @@ public class FragmentShot extends ImmersiveModeFragment {// implements CameraBri
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_shot, container, false);
+        final View view = inflater.inflate(R.layout.fragment_shot, container, false);
 
         /**OpenCV Camera version*/
 //         getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON | WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -103,47 +103,51 @@ public class FragmentShot extends ImmersiveModeFragment {// implements CameraBri
 
         // Create our Preview view and set it as the content of our activity.
         if (mCamera != null) {
-            mShutterCallback = new Camera.ShutterCallback() {
-                @Override
-                public void onShutter() {
-                    /**Play camera's Beep sound*/
-                    MediaPlayer mp = MediaPlayer.create(getContext(), R.raw.cam_beep);
-                    mp.start();
-                }
-            };
+//            mShutterCallback = new Camera.ShutterCallback() {
+//                @Override
+//                public void onShutter() {
+//                    /**Play camera's Beep sound*/
+//                    MediaPlayer mp = MediaPlayer.create(getContext(), R.raw.cam_beep);
+//                    mp.start();
+//                }
+//            };
             mPictureCallback = new Camera.PictureCallback() {
                 @Override
                 public void onPictureTaken(byte[] data, Camera camera) {
                     /**PostProcess Captured Img, i.e crop it?*/
                     socketSendImg(data);
+                    /**Sets default AUTO Flash mode back*/
+                    mCameraView.toggleFlash();
                 }
             };
 
             mCameraView = new CameraView(getActivity().getBaseContext(), mCamera);
             FrameLayout camera_view = (FrameLayout) view.findViewById(R.id.camera_preview);
-            camera_view.setOnClickListener(
-                    new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            // get an image from the camera
-                            getPicResults();
-
-                        }
-                    }
-            );
+            camera_view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    getPicResults();
+                }
+            });
             camera_view.addView(mCameraView);//add the SurfaceView to the colorsLayout
 
             // Trap the capture button.
-            Button captureButton = (Button) view.findViewById(R.id.button_capture);
-            captureButton.setOnClickListener(
-                    new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            // get an image from the camera
-                            getPicResults();
-                        }
-                    }
-            );
+            view.findViewById(R.id.button_capture).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    getPicResults();
+                }
+            });
+            final ImageView flashIcon = (ImageView) view.findViewById(R.id.iconFlash);
+            flashIcon.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mCameraView.toggleFlash();
+                    if (mCameraView.flashOn)
+                        flashIcon.setAlpha((float) 0.6);
+                }
+            });
+
         }
 
         /** Socket init*/
@@ -162,11 +166,14 @@ public class FragmentShot extends ImmersiveModeFragment {// implements CameraBri
         mCamera.autoFocus(new Camera.AutoFocusCallback() {
             @Override
             public void onAutoFocus(boolean success, Camera camera) {
-//                if(success){
-                camera.takePicture(mShutterCallback, null, mPictureCallback);
+                if (success) {
+                    camera.takePicture(/*mShutterCallback*/null, null, mPictureCallback);
+                }
 //                }else{
 //                    Log.d("FOCUS", "Error focusing the camera");
-//                    getPicResults();
+//                    if(!retryFocus)
+//                        getPicResults();
+//                    retryFocus=true;
 //                }
             }
         });

@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:screenOrientation="portrait"
     android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
-    tools:context="com.shotgot.shotgot.Fragment.FragmentShot">
+    tools:context="com.shotgot.shotgot.fragment.FragmentShot">
     <!--android:layout_margin="0dp"-->
 
     <!--<org.opencv.android.JavaCameraView-->
@@ -28,7 +28,7 @@
         android:textColor="@android:color/holo_blue_light" />
 
     <GridLayout
-        android:id="@+id/tags"
+        android:id="@+id/tagsLayout"
         android:layout_width="match_parent"
         android:layout_height="462dp"
         android:layout_gravity="center"

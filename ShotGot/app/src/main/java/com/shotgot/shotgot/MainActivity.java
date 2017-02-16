@@ -22,9 +22,9 @@ import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.shotgot.shotgot.Fragment.FragmentAround;
-import com.shotgot.shotgot.Fragment.FragmentShot;
-import com.shotgot.shotgot.Fragment.ImmersiveModeFragment;
+import com.shotgot.shotgot.fragment.FragmentAround;
+import com.shotgot.shotgot.fragment.FragmentShot;
+import com.shotgot.shotgot.fragment.ImmersiveModeFragment;
 
 import org.opencv.android.OpenCVLoader;
 

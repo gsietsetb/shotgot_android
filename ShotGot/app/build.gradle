@@ -18,6 +18,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    repositories {
+        mavenCentral()
+    }
     productFlavors {
     }
     sourceSets { main { jni.srcDirs = ['libs'] } } // ['src/main/jni', 'src/main/jniLibs/'] } }
@@ -33,11 +36,13 @@ dependencies {
     compile 'com.android.support:support-v4:25.1.1'
     compile 'com.google.android.gms:play-services:10.0.1'
     compile 'com.google.code.gson:gson:2.6.2'
-//    compile 'com.theartofdev.edmodo:android-image-cropper:2.3.+'
+    //compile 'com.theartofdev.edmodo:android-image-cropper:2.3.+'
     compile('io.socket:socket.io-client:0.8.3') {
         // excluding org.json which is provided by Android
         exclude group: 'org.json', module: 'json'
     }
+    compile 'com.google.code.gson:gson:2.2.4'
+
     testCompile 'junit:junit:4.12'
     compile project(':openCVLibrary320')
 }

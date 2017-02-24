@@ -17,13 +17,22 @@ public class MetaModel {
     @SerializedName("type")
     private String mType;
     @SerializedName("data")
-    private ArrayList mData;
+    private String mData;
 
-    public MetaModel(String id, String cv_api, String mType, ArrayList data) {
+    public MetaModel(String id, String cv_api, String mType, String data) {
         this.mId = id;
         this.mCv_api = cv_api;
         this.mType = mType;
-        this.mData = (data != null) ? data : new ArrayList();
+        this.mData = data;
+    }
+
+    public MetaModel(String id, String cv_api, String mType, ArrayList data) {
+        for (int i = 0; i < data.size(); i++) {
+            this.mId = id + i;
+            this.mCv_api = cv_api;
+            this.mType = mType;
+            this.mData = data.get(i).toString();
+        }
     }
 
     public boolean isColor() {
@@ -33,8 +42,9 @@ public class MetaModel {
     }
 
     public boolean isNotEmpty() {
-        if (!this.mData.equals("undefined"))
-            return true;
+        if (this.mData != null)
+            if (!this.mData.equals("undefined"))
+                return true;
         return false;
     }
 
@@ -46,14 +56,14 @@ public class MetaModel {
         this.mCv_api = mCv_api;
     }
 
-    public ArrayList getData() {
+    public String getData() {
 //        if(isColor())
         return mData;
     }
 
-    public void setData(ArrayList data) {
-        this.mData = data;
-    }
+//    public void setData(ArrayList data) {
+//        this.mData = data;
+//    }
 
     public String getId() {
         return mId;

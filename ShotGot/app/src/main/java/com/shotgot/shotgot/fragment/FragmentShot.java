@@ -5,6 +5,7 @@ package com.shotgot.shotgot.fragment;
  */
 
 import android.hardware.Camera;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
@@ -38,6 +39,7 @@ public class FragmentShot extends ImmersiveModeFragment {// implements CameraBri
     private GridLayout tagsLayout;
     private GridLayout colorsLayout;
     private Random rand = new Random();
+
     /**
      * Native Android Camera
      */
@@ -45,7 +47,6 @@ public class FragmentShot extends ImmersiveModeFragment {// implements CameraBri
     private CameraView mCameraView = null;
     private Camera.PictureCallback mPictureCallback;
     private Camera.ShutterCallback mShutterCallback;
-
     /**
      * For NodeJS API api.shotgot.com
      */
@@ -90,27 +91,20 @@ public class FragmentShot extends ImmersiveModeFragment {// implements CameraBri
                              Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_shot, container, false);
 
-        /**OpenCV Camera version*/
-//         getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON | WindowManager.LayoutParams.FLAG_FULLSCREEN);
-//         //        getActivity().setContentView(R.colorsLayout.fragment_computer_vision);
-//         mOpenCvCameraView = (CameraBridgeViewBase) view.findViewById(R.id.CV_VIEW);
-//         mOpenCvCameraView.setVisibility(SurfaceView.VISIBLE);
-//         mOpenCvCameraView.setCvCameraViewListener(this);
-
         /**InnerCamera Version*/
         /* Create an instance of Camera*/
         mCamera = getCameraInstance();
 
-        // Create our Preview view and set it as the content of our activity.
+        // Create our Preview view and set it as the co                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         ntent of our activity.
         if (mCamera != null) {
-//            mShutterCallback = new Camera.ShutterCallback() {
-//                @Override
-//                public void onShutter() {
-//                    /**Play camera's Beep sound*/
-//                    MediaPlayer mp = MediaPlayer.create(getContext(), R.raw.cam_beep);
-//                    mp.start();
-//                }
-//            };
+            mShutterCallback = new Camera.ShutterCallback() {
+                @Override
+                public void onShutter() {
+                    /**Play camera's Beep sound*/
+                    MediaPlayer mp = MediaPlayer.create(getContext(), R.raw.cam_beep);
+                    mp.start();
+                }
+            };
             mPictureCallback = new Camera.PictureCallback() {
                 @Override
                 public void onPictureTaken(byte[] data, Camera camera) {
@@ -143,8 +137,8 @@ public class FragmentShot extends ImmersiveModeFragment {// implements CameraBri
                 @Override
                 public void onClick(View v) {
                     mCameraView.toggleFlash();
-                    if (mCameraView.flashOn)
-                        flashIcon.setAlpha((float) 0.6);
+                    if (!mCameraView.flashOn)
+                        flashIcon.setAlpha((float) 0.2);
                 }
             });
 
@@ -167,14 +161,14 @@ public class FragmentShot extends ImmersiveModeFragment {// implements CameraBri
             @Override
             public void onAutoFocus(boolean success, Camera camera) {
                 if (success) {
-                    camera.takePicture(/*mShutterCallback*/null, null, mPictureCallback);
+                    camera.takePicture(mShutterCallback/*null*/, null, mPictureCallback);
+                } else {
+                    Log.d("FOCUS", "Error focusing the camera");
+                    if (!retryFocus)
+                        getPicResults();
+                    retryFocus = true;
+                    camera.takePicture(mShutterCallback/*null*/, null, mPictureCallback);
                 }
-//                }else{
-//                    Log.d("FOCUS", "Error focusing the camera");
-//                    if(!retryFocus)
-//                        getPicResults();
-//                    retryFocus=true;
-//                }
             }
         });
     }
@@ -192,6 +186,14 @@ public class FragmentShot extends ImmersiveModeFragment {// implements CameraBri
 //        if (mOpenCvCameraView != null)
 //        mOpenCvCameraView.disableView();
     }
+
+//    private void addRespColorLayout(MetaModel colorWrapper) {
+//        for (int col : colorWrapper.getData()) {
+//            RadioButton rButt = new RadioButton(getContext());
+//            rButt.setBackgroundColor(col);
+//            colorsLayout.addView(rButt, ++nColorsClarifai);
+//        }
+//    }
 
     @Override
     public void onDestroy() {
@@ -214,14 +216,6 @@ public class FragmentShot extends ImmersiveModeFragment {// implements CameraBri
         tagsLayout.addView(tagView);
     }
 
-//    private void addRespColorLayout(MetaModel colorWrapper) {
-//        for (int col : colorWrapper.getData()) {
-//            RadioButton rButt = new RadioButton(getContext());
-//            rButt.setBackgroundColor(col);
-//            colorsLayout.addView(rButt, ++nColorsClarifai);
-//        }
-//    }
-
     /**
      * Through Socket.io to api.shotgot.com API
      */
@@ -230,5 +224,4 @@ public class FragmentShot extends ImmersiveModeFragment {// implements CameraBri
         String imgString = Base64.encodeToString(data, Base64.NO_WRAP);
         mSocket.emit("PIC_REQ", imgString);
     }
-
 }

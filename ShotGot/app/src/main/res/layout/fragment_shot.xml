@@ -16,6 +16,11 @@
     <!--android:visibility="gone"-->
     <!--opencv:camera_id="any"-->
     <!--opencv:show_fps="true" />-->
+    <TextureView
+        android:id="@+id/texture"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true" />
 
     <Button
         android:id="@+id/button_capture"
@@ -33,8 +38,8 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_gravity="center|right"
-        android:background="@android:color/holo_blue_light"
         android:elevation="16dp"
+        android:tint="@android:color/holo_blue_light"
         android:visibility="visible"
         app:srcCompat="@drawable/flash" />
 

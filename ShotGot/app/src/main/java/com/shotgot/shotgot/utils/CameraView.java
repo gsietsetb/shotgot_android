@@ -235,10 +235,10 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
             if (!flashOn) {
                 flashOn = true;
                 return mSupportedFlashModes.contains(Camera.Parameters.FLASH_MODE_TORCH) ?
-                        Camera.Parameters.FLASH_MODE_TORCH :
+                        Camera.Parameters.FLASH_MODE_ON :
                         mSupportedFlashModes.contains(Camera.Parameters.FLASH_MODE_RED_EYE) ?
                                 Camera.Parameters.FLASH_MODE_RED_EYE :
-                                Camera.Parameters.FLASH_MODE_ON;
+                                Camera.Parameters.FLASH_MODE_TORCH;
             } else {
                 /**After pressing twice, it sets Back to AUTO (default)*/
                 flashOn = false;

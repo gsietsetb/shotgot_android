@@ -13,20 +13,17 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.shotgot.shotgot.fragment.FragmentAround;
-import com.shotgot.shotgot.fragment.FragmentShot;
 import com.shotgot.shotgot.fragment.ImmersiveModeFragment;
+import com.shotgot.shotgot.fragment.ShotFragment;
 
-import org.opencv.android.OpenCVLoader;
+//import org.opencv.android.OpenCVLoader;
 
 public class MainActivity extends ActionBarActivity implements NavigationView.OnNavigationItemSelectedListener,
         FragmentAround.OnFragmentInteractionListener {
@@ -37,13 +34,13 @@ public class MainActivity extends ActionBarActivity implements NavigationView.On
     */
     private static final String TAG = "MainActivity";
 
-    static {
-        if (!OpenCVLoader.initDebug()) {
-            Log.d(TAG, "OpenCV not loadaed");
-        } else {
-            Log.d(TAG, "OpenCV loadaed");
-        }
-    }
+//    static {
+//        if (!OpenCVLoader.initDebug()) {
+//            Log.d(TAG, "OpenCV not loadaed");
+//        } else {
+//            Log.d(TAG, "OpenCV loadaed");
+//        }
+//    }
 
     public CharSequence mTitle;
     /**
@@ -169,7 +166,7 @@ public class MainActivity extends ActionBarActivity implements NavigationView.On
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         switch (item.getItemId()) {
             case R.id.nav_ShotGot:
-                targetFragment = new FragmentShot();
+                targetFragment = new ShotFragment();//FragmentShot();
                 mTitle = getString(R.string.title_Shot);
 
                 break;
@@ -202,7 +199,7 @@ public class MainActivity extends ActionBarActivity implements NavigationView.On
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
+
     public Action getIndexApiAction() {
         Thing object = new Thing.Builder()
                 .setName("Main Page") // TODO: Define a title for the content shown.
@@ -233,5 +230,5 @@ public class MainActivity extends ActionBarActivity implements NavigationView.On
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         AppIndex.AppIndexApi.end(client, getIndexApiAction());
         client.disconnect();
-    }
+    } */
 }

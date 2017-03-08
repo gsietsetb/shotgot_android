@@ -44,24 +44,23 @@
         android:visibility="visible"
         app:srcCompat="@drawable/flash" />
 
-    <GridLayout
+    <TableLayout
         android:id="@+id/colors"
         android:layout_width="match_parent"
-        android:layout_height="85dp"
+        android:layout_height="185dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:layout_gravity="center|bottom"
         android:layout_marginBottom="36dp"
-        android:layout_marginTop="36dp"
         android:elevation="25dp"
         android:visibility="invisible">
 
-    </GridLayout>
+    </TableLayout>
 
     <RelativeLayout
         android:id="@+id/tagsLayout"
         android:layout_width="match_parent"
-        android:layout_height="920dp"
+        android:layout_height="match_parent"
         android:layout_alignParentStart="true"
         android:layout_gravity="center"
         android:layout_marginBottom="50dp"
@@ -74,13 +73,25 @@
     <RelativeLayout
         android:id="@+id/textLayout"
         android:layout_width="match_parent"
-        android:layout_height="920dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
         android:layout_gravity="center"
-        android:layout_marginStart="247dp"
-        android:layout_toEndOf="@+id/texts"
+        android:layout_marginTop="18dp"
+        android:layout_toEndOf="@+id/button_capture"
         android:elevation="25dp"
         android:visibility="invisible">
 
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="19dp"
+            android:elevation="25dp"
+            android:text="TextView"
+            tools:text="Recognized texts:" />
     </RelativeLayout>
 
 </RelativeLayout>

@@ -46,9 +46,10 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridLayout;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -123,12 +124,11 @@ public class ShotFragment extends ImmersiveModeFragment
         ORIENTATIONS.append(Surface.ROTATION_270, 180);
     }
 
-    private boolean previousSearch = false;
+    private boolean newSearch = false;
+    private boolean previousResult = false;
     private boolean retryFocus = false;
-    private int nTags = 0;
-    private int nCols = 0;
     private RelativeLayout tagsLayout, textLayout;
-    private GridLayout colorsLayout;
+    private TableLayout colorsLayout;
     private Random rand = new Random();
     private Socket mSocket;
     /**
@@ -341,25 +341,30 @@ public class ShotFragment extends ImmersiveModeFragment
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    /**Delete previous matches from the screen*/
-                    if (!previousSearch) {
+                    if (newSearch && previousResult) {
+                        tagsLayout.removeAllViews();
+                        colorsLayout.removeAllViews();
+                        textLayout.removeAllViews();
+                        newSearch = false;
+                    }
+                    if (!previousResult) {
                         tagsLayout = (RelativeLayout) getActivity().findViewById(R.id.tagsLayout);
                         tagsLayout.setVisibility(View.VISIBLE);
                         textLayout = (RelativeLayout) getActivity().findViewById(R.id.textLayout);
-                        colorsLayout = (GridLayout) getActivity().findViewById(R.id.colors);
+                        textLayout.setVisibility(View.VISIBLE);
+                        colorsLayout = (TableLayout) getActivity().findViewById(R.id.colors);
                         colorsLayout.setVisibility(View.VISIBLE);
-                    } else {
-                        tagsLayout.removeViews(0, nTags);
-                        colorsLayout.removeViews(0, nCols);
+                        previousResult = true;
                     }
-                    previousSearch = true;
                     JSONObject respTag = (JSONObject) args[0];
                     try {
-                        switch ((String) respTag.get("type")) {
+                        switch (respTag.getString("type")) {
                             case "CLRs":
-                                JSONArray cols = (JSONArray) respTag.get("data");
-                                Log.d("Color", "Trying to add col: " + cols);
-                                addRespColorLayout(cols);
+                                Log.d("MALFORMED_API", "is " + respTag.getString("type") + " equals to CLRs??");
+                                String api = respTag.getString("cv_api");
+                                JSONArray cols = respTag.getJSONArray("data");
+                                Log.d("Color", "Trying to add col: " + cols + "from: " + api);
+                                addRespColorLayout(cols, api);
                                 break;
                             case "TAGs":
                                 JSONArray tags = (JSONArray) respTag.get("data");
@@ -933,6 +938,7 @@ public class ShotFragment extends ImmersiveModeFragment
             mState = STATE_PREVIEW;
             mCaptureSession.setRepeatingRequest(mPreviewRequest, mCaptureCallback,
                     mBackgroundHandler);
+            newSearch = true;
         } catch (CameraAccessException e) {
             e.printStackTrace();
         }
@@ -976,8 +982,8 @@ public class ShotFragment extends ImmersiveModeFragment
 
     private void addRespLabels(String tag) {
         TextView tagView = new TextView(getContext());
-        tagView.setX(rand.nextInt(780));
-        tagView.setY(rand.nextInt(1080));
+        tagView.setX(rand.nextInt(1780));
+        tagView.setY(rand.nextInt(2080));
         tagView.setTextColor(getResources().getColor(R.color.wallet_holo_blue_light));
         Log.d("AddView", rand.nextInt(580) + " is the place to add " + tag);
         tagView.setText(tag);
@@ -992,16 +998,29 @@ public class ShotFragment extends ImmersiveModeFragment
         textLayout.addView(tagView);
     }
 
-    private void addRespColorLayout(JSONArray respColor) throws JSONException {
+    private void addRespColorLayout(JSONArray respColor, String api) throws JSONException {
+        /**n-th Row*/
+        TableRow tr1 = new TableRow(getContext());
+
+        /**Title TextView*/
+        TextView title = new TextView(getContext());
+        title.setText(api);
+        title.setTextColor(getResources().getColor(R.color.wallet_highlighted_text_holo_dark));
+        tr1.addView(title);
+
+        /**Colors dinamically added to the row*/
         for (int i = 0; i < respColor.length(); i++) {
             RadioButton rButt = new RadioButton(getContext());
             String col = respColor.get(i).toString();
             int resColor = Color.parseColor((!col.startsWith("#") ? "#" + col : col));
-            Log.d("AddView", "Trying to add " + resColor);
             rButt.setBackgroundColor(resColor);
-            colorsLayout.addView(rButt);
+            tr1.addView(rButt);
         }
+
+        /**Finally we add the whole Row to the TableLayout*/
+        colorsLayout.addView(tr1);
     }
+
 
     @Override
     public void onDestroy() {
